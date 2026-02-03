@@ -29,6 +29,7 @@ class GenerateGameRecaps extends Command
             ->get();
 
         $count = 0;
+        /** @var \App\Models\Game $game */
         foreach ($games as $game) {
             // Check if article already exists for this specific game slug pattern
             // This is a rough check since we don't have game_id column in articles yet

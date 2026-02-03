@@ -92,3 +92,36 @@ Cada equipo tiene su propio subdominio.
 - **App/Filament**: Recursos y páginas del panel administrativo.
 - **App/Models**: Modelos Eloquent (`League`, `Team`, `Player`, `Season`, etc.).
 - **Database/Seeders**: Seeders para datos iniciales y de prueba.
+
+## Nuevas Funcionalidades (v2.0)
+
+Se ha implementado un portal público completo y un sistema de automatización de contenidos:
+
+### 1. Portal Público (Public Frontend)
+El sistema ahora cuenta con un sitio web público para la liga y los equipos, totalmente responsive y con diseño "Sports Premium" (Midnight Slate & Vibrant Orange).
+
+*   **Landing Page de Liga (`/`)**: 
+    *   Noticias destacadas y cuadrícula de artículos recientes.
+    *   Tabla de Posiciones (Standings) calculada dinámicamente.
+    *   Hero section con contenido multimedia.
+*   **Sitio de Equipo (Team Dashboard)** (`{team}.app...`):
+    *   Subdominio único para cada equipo.
+    *   Noticias exclusivas del equipo.
+    *   Roster activo con enlaces a perfiles.
+    *   Líderes de estadísticas (Team Leaders).
+*   **Perfil de Jugador**: Ficha técnica detallada con desglose de estadísticas por temporada.
+
+### 2. Automatización de Noticias (Game Recaps)
+El sistema genera noticias automáticamente al finalizar los juegos.
+*   **Servicio**: `GameRecapService` analiza el resultado (ganador, perdedor, score) y las estadísticas.
+*   **MVP**: Identifica automáticamente al jugador más valioso del partido (Hits, RBIs, HRs) para mencionarlo en la crónica.
+*   **Comando**: Ejecuta `php artisan baseball:generate-recaps` para generar noticias de juegos recientes.
+
+### 3. Sistema de Contenidos (CMS)
+*   **Modelo `Article`**: Gestión de noticias con soporte para imágenes, categorías (Recap, Highlight, Analysis) y Slugs SEO-friendly.
+*   **Admin Panel**: Recurso de Filament para crear y editar noticias desde el backend.
+
+### 4. Rebranding & UI
+*   Refactorización completa de componentes (`x-sports.*`) eliminando dependencias de marcas externas.
+*   Diseño limpio y agnóstico ("White Label") listo para producción.
+*   Iconos SVG nativos y optimización de assets.
