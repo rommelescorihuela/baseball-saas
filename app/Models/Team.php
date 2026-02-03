@@ -18,6 +18,8 @@ class Team extends Model
         'name',
         'category_id',
         'subdomain',
+        'logo',
+        'primary_color',
     ];
 
     public function category(): BelongsTo

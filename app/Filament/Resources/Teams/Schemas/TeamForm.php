@@ -22,6 +22,12 @@ class TeamForm
                     ->required(),
                 TextInput::make('subdomain')
                     ->required(),
+                \Filament\Forms\Components\FileUpload::make('logo')
+                    ->image()
+                    ->directory('team-logos')
+                    ->visibility('public'),
+                \Filament\Forms\Components\ColorPicker::make('primary_color')
+                    ->default('#0f172a'),
             ]);
     }
 }

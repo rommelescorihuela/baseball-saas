@@ -14,6 +14,11 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'brand-primary': '#0f172a', // Midnight Slate
+                'brand-secondary': '#f97316', // Vibrant Orange
+                'brand-light': '#f8fafc', // Light Slate
+            },
         },
     },
 

@@ -17,15 +17,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::domain('{team}.app.baseball.test')->middleware(['auth', 'team.access'])->group(function () {
-    Route::get('/dashboard', function () {
-        return 'Dashboard del equipo: ' . current_team()->name;
-    });
+Route::domain('{team}.app.baseball.test')->middleware(['web'])->group(function () {
+    Route::get('/', [App\Http\Controllers\PublicTeamController::class, 'index'])->name('teams.home');
+    Route::get('/players/{player}', [App\Http\Controllers\PublicTeamController::class, 'showPlayer'])->name('players.show');
 });
 
-Route::domain('app.baseball.test')->middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return 'Dashboard general';
+Route::domain('app.baseball.test')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
     });
 });
 
