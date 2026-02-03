@@ -20,7 +20,7 @@ class ResolveTenant
         $subdomain = $parts[0];
 
         // Evitar tratar 'app' como equipo
-        if ($subdomain === 'app') {
+        if ($subdomain === 'app' || $subdomain === 'localhost') {
             app()->instance('currentLeague', null);
             app()->instance('currentTeam', null);
             return $next($request);
