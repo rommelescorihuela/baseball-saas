@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Teams\Schemas;
+namespace App\Filament\Resources\Categories\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
-class TeamForm
+class CategoryForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -16,11 +16,6 @@ class TeamForm
                     ->relationship('league', 'name')
                     ->required(),
                 TextInput::make('name')
-                    ->required(),
-                Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->required(),
-                TextInput::make('subdomain')
                     ->required(),
             ]);
     }

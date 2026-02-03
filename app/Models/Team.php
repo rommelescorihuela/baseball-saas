@@ -16,9 +16,14 @@ class Team extends Model
     protected $fillable = [
         'league_id',
         'name',
-        'category',
+        'category_id',
         'subdomain',
     ];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function league()
     {

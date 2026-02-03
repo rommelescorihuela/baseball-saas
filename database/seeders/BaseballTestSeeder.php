@@ -12,6 +12,7 @@ use App\Models\Game;
 use App\Models\PlayerStat;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Models\Category;
 
 class BaseballTestSeeder extends Seeder
 {
@@ -33,7 +34,7 @@ class BaseballTestSeeder extends Seeder
         );
 
         // ================================
-        // 2️⃣ Crear equipos
+        // 2️⃣ Crear equipos y Categorías
         // ================================
         $teamsData = [
             ['league' => $league1, 'name' => 'Leones', 'category' => 'U15', 'subdomain' => 'leones'],
@@ -44,12 +45,17 @@ class BaseballTestSeeder extends Seeder
 
         $teams = [];
         foreach ($teamsData as $t) {
+            // Asegurarse de que la categoría existe para la liga
+            $category = Category::firstOrCreate(
+                ['league_id' => $t['league']->id, 'name' => $t['category']]
+            );
+
             $team = Team::firstOrCreate(
                 ['subdomain' => $t['subdomain']],
                 [
                     'league_id' => $t['league']->id,
                     'name' => $t['name'],
-                    'category' => $t['category']
+                    'category_id' => $category->id
                 ]
             );
             $teams[] = $team;
