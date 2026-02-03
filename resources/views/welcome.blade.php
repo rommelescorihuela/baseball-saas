@@ -1,32 +1,33 @@
 <x-sports-layout>
     <!-- Featured Hero Section -->
     <section class="relative bg-gray-900 text-white">
-        <div class="absolute inset-0 bg-cover bg-center opacity-60"
-            style="background-image: url('{{ asset('images/hero-bg.png') }}');">
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
-
-        <div class="relative container mx-auto px-4 py-24 md:py-32 flex flex-col justify-end min-h-[500px]">
-            <span
-                class="bg-brand-secondary text-white text-xs font-bold px-3 py-1 uppercase tracking-widest rounded w-fit mb-4">Trending
-                Now</span>
-            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 max-w-4xl">
-                Opening Day Approaches: <br>Top 5 Prospects to Watch This Season
-            </h1>
-            <p class="text-xl md:text-2xl font-medium text-gray-200 mb-8 max-w-2xl">
-                The future of the league is here. Get to know the young stars ready to make an impact.
-            </p>
-            <div class="flex space-x-4">
-                <a href="#"
-                    class="bg-white text-brand-primary font-bold py-3 px-8 rounded-full uppercase tracking-wide hover:bg-gray-100 transition shadow-lg">
-                    Read Story
-                </a>
-                <a href="#"
-                    class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full uppercase tracking-wide hover:bg-white/10 transition">
-                    Full Schedule
-                </a>
+        @if($heroArticle)
+            <div class="absolute inset-0 bg-cover bg-center opacity-60"
+                style="background-image: url('{{ $heroArticle->image_url ?? asset('images/hero-bg.png') }}');">
             </div>
-        </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+
+            <div class="relative container mx-auto px-4 py-24 md:py-32 flex flex-col justify-end min-h-[500px]">
+                <span
+                    class="bg-brand-secondary text-white text-xs font-bold px-3 py-1 uppercase tracking-widest rounded w-fit mb-4">{{ $heroArticle->category }}</span>
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 max-w-4xl">
+                    {{ $heroArticle->title }}
+                </h1>
+                <p class="text-xl md:text-2xl font-medium text-gray-200 mb-8 max-w-2xl">
+                    {{ Str::limit($heroArticle->content, 150) }}
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#"
+                        class="bg-white text-brand-primary font-bold py-3 px-8 rounded-full uppercase tracking-wide hover:bg-gray-100 transition shadow-lg">
+                        Read Story
+                    </a>
+                    <a href="#"
+                        class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full uppercase tracking-wide hover:bg-white/10 transition">
+                        Full Schedule
+                    </a>
+                </div>
+            </div>
+        @endif
     </section>
 
     <!-- Content Grid -->
@@ -42,13 +43,13 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                    <x-sports.news-card title="Yankees maintain dominance in AL East standing" time="45m ago"
-                        category="Recap" image="https://placehold.co/600x400/0f172a/FFF?text=Recap" />
-                    <x-sports.news-card title="Ohtani's historic run continues with 45th HR" time="2h ago"
-                        category="Highlight" />
-                    <x-sports.news-card title="Trade Deadline Winners and Losers" time="5h ago" category="Analysis" />
-                    <x-sports.news-card title="Developing: Pitcher injury report update" time="6h ago"
-                        category="Injury" />
+                    @foreach($newsGrid as $article)
+                        <x-sports.news-card 
+                            :title="$article->title" 
+                            :time="$article->published_at->diffForHumans()"
+                            :category="$article->category"
+                            :image="$article->image_url" />
+                    @endforeach
                 </div>
             </div>
 
@@ -75,36 +76,19 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-3 py-3 text-left font-bold text-gray-900 flex items-center space-x-2">
-                                    <span class="w-2 h-2 rounded-full bg-brand-primary"></span>
-                                    <span>NYY</span>
-                                </td>
-                                <td class="font-bold">45</td>
-                                <td>20</td>
-                                <td>.692</td>
-                                <td>-</td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-3 py-3 text-left font-bold text-gray-900 flex items-center space-x-2">
-                                    <span class="w-2 h-2 rounded-full bg-red-600"></span>
-                                    <span>BOS</span>
-                                </td>
-                                <td class="font-bold">38</td>
-                                <td>27</td>
-                                <td>.585</td>
-                                <td>7.0</td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-3 py-3 text-left font-bold text-gray-900 flex items-center space-x-2">
-                                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-                                    <span>TB</span>
-                                </td>
-                                <td class="font-bold">35</td>
-                                <td>30</td>
-                                <td>.538</td>
-                                <td>10.0</td>
-                            </tr>
+                            @foreach($standings as $stat)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-3 py-3 text-left font-bold text-gray-900 flex items-center space-x-2">
+                                        <span class="w-2 h-2 rounded-full"
+                                            style="background-color: {{ $stat['team']->primary_color ?? '#000' }};"></span>
+                                        <span>{{ $stat['team']->category->name ?? '' }} {{ $stat['team']->name }}</span>
+                                    </td>
+                                    <td class="font-bold">{{ $stat['wins'] }}</td>
+                                    <td>{{ $stat['losses'] }}</td>
+                                    <td>{{ $stat['pct'] }}</td>
+                                    <td>{{ $stat['gb'] }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

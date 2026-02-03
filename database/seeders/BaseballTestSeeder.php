@@ -160,6 +160,51 @@ class BaseballTestSeeder extends Seeder
             }
         }
 
+        // ================================
+        // 7️⃣ Crear Noticias (Articles)
+        // ================================
+        \App\Models\Article::create([
+            'title' => 'Opening Day Approaches: Top 5 Prospects to Watch This Season',
+            'slug' => 'opening-day-prospects',
+            'content' => 'Full story about top prospects...',
+            'category' => 'Highlight',
+            'image_url' => '/images/hero-bg.png', // Dynamic data now uses the real image
+            'published_at' => now(),
+        ]);
+
+        \App\Models\Article::create([
+            'title' => 'Yankees maintain dominance in AL East standing',
+            'slug' => 'yankees-dominance',
+            'content' => 'Recap of the Yankees season so far...',
+            'category' => 'Recap',
+            'image_url' => 'https://placehold.co/600x400/0f172a/FFF?text=Recap',
+            'published_at' => now()->subMinutes(45),
+        ]);
+
+        \App\Models\Article::create([
+            'title' => 'Ohtanis historic run continues with 45th HR',
+            'slug' => 'ohtani-45th-hr',
+            'content' => 'Another home run for the history books...',
+            'category' => 'Highlight',
+            'published_at' => now()->subHours(2),
+        ]);
+
+        \App\Models\Article::create([
+            'title' => 'Trade Deadline Winners and Losers',
+            'slug' => 'trade-deadline-analysis',
+            'content' => 'Analysis of the trade deadline moves...',
+            'category' => 'Analysis',
+            'published_at' => now()->subHours(5),
+        ]);
+
+        \App\Models\Article::create([
+            'title' => 'Developing: Pitcher injury report update',
+            'slug' => 'pitcher-injury-update',
+            'content' => 'Breaking news on injuries...',
+            'category' => 'Injury',
+            'published_at' => now()->subHours(6),
+        ]);
+
         $this->command->info('Seeder de prueba completado ✅');
     }
 }
