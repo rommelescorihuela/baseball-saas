@@ -56,6 +56,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Main Domain
+    |--------------------------------------------------------------------------
+    |
+    | This is the main domain used for multi-tenant subdomain resolution.
+    | When a request comes to this domain (or localhost), teams are resolved
+    | via route parameters instead of subdomains.
+    |
+    */
+
+    'main_domain' => env('APP_MAIN_DOMAIN', 'localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

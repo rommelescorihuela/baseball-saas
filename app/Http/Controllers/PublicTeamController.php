@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Player;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PublicTeamController extends Controller
 {
@@ -22,8 +23,22 @@ class PublicTeamController extends Controller
         ]);
     }
 
-    public function showPlayer(Player $player)
+    public function showPlayer(Request $request)
     {
+        // Obtener el ID del jugador directamente de la ruta
+        $playerId = $request->route('id');
+        
+        Log::debug('showPlayer called with playerId: ' . $playerId);
+        Log::debug('Current team: ' . (app('currentTeam') ? app('currentTeam')->id : 'null'));
+        Log::debug('All route parameters: ', $request->route()->parameters());
+        
+        if (!$playerId) {
+            abort(404, 'Player ID not found in route');
+        }
+
+        // Buscar el jugador por ID
+        $player = Player::findOrFail($playerId);
+
         // Asegurar que el jugador pertenece al equipo actual
         if ($player->team_id !== app('currentTeam')->id) {
             abort(404);
@@ -32,12 +47,9 @@ class PublicTeamController extends Controller
         // Eager loading stats efficiently
         $player->load([
             'stats' => function ($query) {
-                $query->latest(); // Asumimos created_at o añadiremos game_date
+                $query->latest();
             }
         ]);
-
-        // Calcular totales de la temporada (Simulado por ahora ya que requeriría lógica de agregación compleja)
-        // En un escenario real, haríamos $player->stats->sum('hits') etc.
 
         return view('players.show', [
             'player' => $player,

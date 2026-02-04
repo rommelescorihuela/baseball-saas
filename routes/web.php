@@ -15,9 +15,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::domain('{team}.app.baseball.test')->middleware(['web'])->group(function () {
+// Rutas de equipos (producción con subdominios)
+Route::domain('{team}.app.baseball.test')->middleware(['web', 'tenant'])->group(function () {
     Route::get('/', [App\Http\Controllers\PublicTeamController::class, 'index'])->name('teams.home');
     Route::get('/players/{player}', [App\Http\Controllers\PublicTeamController::class, 'showPlayer'])->name('players.show');
+});
+
+// Rutas alternativas para desarrollo local
+// Acceso: http://localhost:8000/equipo/{team}/jugador/{id}
+Route::middleware(['web', 'tenant'])->prefix('equipo/{team}')->group(function () {
+    Route::get('/jugador/{id}', [App\Http\Controllers\PublicTeamController::class, 'showPlayer'])->name('players.show');
+    Route::get('/', [App\Http\Controllers\PublicTeamController::class, 'index'])->name('teams.home');
 });
 
 Route::domain('app.baseball.test')->group(function () {
