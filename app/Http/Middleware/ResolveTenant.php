@@ -18,7 +18,7 @@ class ResolveTenant
         
         // Si estamos en localhost con puerto, extraer el prefijo correctamente
         // Ejemplo: leones.localhost -> subdominio = 'leones'
-        // Ejemplo: leones.app.baseball.test -> subdominio = 'leones'
+        // Ejemplo: leones.midominio.com -> subdominio = 'leones'
         
         // Evitar tratar 'app' o el dominio principal configurado como equipo
         $mainDomain = config('app.main_domain', 'localhost');

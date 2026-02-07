@@ -15,8 +15,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Obtenemos el dominio desde la configuración
+$appDomain = parse_url(config('app.url'), PHP_URL_HOST);
+
 // Rutas de equipos (producción con subdominios)
-Route::domain('{team}.app.baseball.test')->middleware(['web', 'tenant'])->group(function () {
+Route::domain('{team}.' . $appDomain)->middleware(['web', 'tenant'])->group(function () {
     Route::get('/', [App\Http\Controllers\PublicTeamController::class, 'index'])->name('teams.home');
     Route::get('/players/{player}', [App\Http\Controllers\PublicTeamController::class, 'showPlayer'])->name('players.show');
 });
@@ -28,11 +31,12 @@ Route::middleware(['web', 'tenant'])->prefix('equipo/{team}')->group(function ()
     Route::get('/', [App\Http\Controllers\PublicTeamController::class, 'index'])->name('teams.home');
 });
 
-Route::domain('app.baseball.test')->group(function () {
+Route::domain($appDomain)->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
 });
+
 
 
 require __DIR__ . '/auth.php';
