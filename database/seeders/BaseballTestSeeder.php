@@ -18,6 +18,7 @@ class BaseballTestSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(RoleSeeder::class);
         $this->command->info('Iniciando seeder de prueba...');
 
         // ================================
