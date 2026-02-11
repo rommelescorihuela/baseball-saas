@@ -48,6 +48,7 @@ class AppPanelProvider extends PanelProvider
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
+                \App\Http\Middleware\CheckSubscriptionLimits::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])

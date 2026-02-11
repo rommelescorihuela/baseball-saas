@@ -9,7 +9,7 @@ use Livewire\Component;
 class GameScoring extends Component
 {
     public Game $game;
-    
+
     // Game State
     public $inning = 1;
     public $is_top_inning = true;
@@ -23,25 +23,25 @@ class GameScoring extends Component
     public function mount(Game $game)
     {
         $this->game = $game;
-        
+
         $lastEvent = $this->game->events()->latest()->first();
         if ($lastEvent) {
             $this->inning = $lastEvent->inning;
             $this->is_top_inning = $lastEvent->is_top_inning;
-            
-            // Basic state restoration
-            // For now, we assume resets happen on events, so we start fresh or persist counts in DB
+
+        // Basic state restoration
+        // For now, we assume resets happen on events, so we start fresh or persist counts in DB
         }
     }
 
     public function getOffensiveTeamProperty()
     {
-         return $this->is_top_inning ? $this->game->visitorTeam : $this->game->homeTeam;
+        return $this->is_top_inning ? $this->game->visitorTeam : $this->game->homeTeam;
     }
 
     public function getDefensiveTeamProperty()
     {
-         return $this->is_top_inning ? $this->game->homeTeam : $this->game->visitorTeam;
+        return $this->is_top_inning ? $this->game->homeTeam : $this->game->visitorTeam;
     }
 
     public function render()
@@ -56,8 +56,8 @@ class GameScoring extends Component
     {
         // Validation
         if (!$this->batter_id || !$this->pitcher_id) {
-             // We can accept some events without this, but for now enforcing it for stats
-             // In real app, use Validation
+        // We can accept some events without this, but for now enforcing it for stats
+        // In real app, use Validation
         }
 
         // Determine Team (Offense)
@@ -78,18 +78,6 @@ class GameScoring extends Component
             'result' => ['kind' => $result],
             'runs_scored' => 0,
         ]);
-            'inning' => $this->inning,
-            'is_top_inning' => $this->is_top_inning,
-            'team_id' => $teamId,
-            'batter_id' => $batter?->id,
-            'pitcher_id' => $pitcher?->id,
-            'outs_before' => $this->outs,
-            'balls_before' => $this->balls,
-            'strikes_before' => $this->strikes,
-            'type' => $type,
-            'result' => ['kind' => $result],
-            'runs_scored' => 0,
-        ]);
 
         $this->updateState($type, $result);
     }
@@ -100,26 +88,30 @@ class GameScoring extends Component
             if ($result === 'ball') {
                 $this->balls++;
                 if ($this->balls >= 4) {
-                     // Walk
-                     $this->resetCount(); 
+                    // Walk
+                    $this->resetCount();
                 }
-            } elseif ($result === 'strike') {
+            }
+            elseif ($result === 'strike') {
                 $this->strikes++;
                 if ($this->strikes >= 3) {
                     // Strikeout
                     $this->outs++;
                     $this->resetCount();
                 }
-            } elseif ($result === 'foul') {
+            }
+            elseif ($result === 'foul') {
                 if ($this->strikes < 2) {
                     $this->strikes++;
                 }
             }
-        } elseif ($type === 'play') {
+        }
+        elseif ($type === 'play') {
             if ($result === 'out') {
                 $this->outs++;
                 $this->resetCount();
-            } elseif ($result === 'hit') {
+            }
+            elseif ($result === 'hit') {
                 $this->resetCount();
             }
         }
@@ -140,4 +132,11 @@ class GameScoring extends Component
         $this->outs = 0;
         $this->resetCount();
         if ($this->is_top_inning) {
- 
+            $this->is_top_inning = false;
+        }
+        else {
+            $this->is_top_inning = true;
+            $this->inning++;
+        }
+    }
+}

@@ -21,7 +21,8 @@
             <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
                 <h3 class="text-xl font-bold text-gray-900">{{ $competition->name }}</h3>
                 <p class="text-gray-500">{{ $competition->season->name }}</p>
-                <a href="#" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium">
+                <a href="{{ route('public.competition.show', $competition) }}"
+                    class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium">
                     View Standings &rarr;
                 </a>
             </div>

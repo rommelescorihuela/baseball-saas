@@ -16,8 +16,10 @@
                         @forelse($team->players as $player)
                         <li class="p-4 flex items-center justify-between hover:bg-gray-50">
                             <div>
-                                <div class="text-sm font-medium text-gray-900">{{ $player->name }} {{ $player->last_name
-                                    }}</div>
+                                <a href="{{ route('public.player.show', $player) }}"
+                                    class="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+                                    {{ $player->name }} {{ $player->last_name }}
+                                </a>
                                 <div class="text-sm text-gray-500">#{{ $player->number }} &bull; {{ $player->position }}
                                 </div>
                             </div>

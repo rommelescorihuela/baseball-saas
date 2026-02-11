@@ -28,7 +28,8 @@
                             {{ substr($team->name, 0, 1) }}
                         </div>
                         <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">{{ $team->name }}</div>
+                            <a href="{{ route('public.team.show', $team) }}"
+                                class="text-sm font-medium text-indigo-600 hover:text-indigo-800">{{ $team->name }}</a>
                             <div class="text-sm text-gray-500">{{ $team->city ?? 'Unknown City' }}</div>
                         </div>
                     </div>
