@@ -48,6 +48,10 @@ class GameEventObserver
                 $stats->ao++;
                 $stats->ab++;
             }
+            elseif ($result === 'strikeout') {
+                $stats->so++;
+                $stats->ab++;
+            }
             elseif (in_array($result, ['hit', '1b', '2b', '3b', 'hr'])) {
                 $stats->h++;
                 $stats->ab++;

@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['competition_id', 'name'];
+    protected $fillable = ['league_id', 'name'];
 
-    public function competition()
+    public function league()
     {
-        return $this->belongsTo(Competition::class);
+        return $this->belongsTo(League::class);
     }
 
     public function teams()

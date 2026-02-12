@@ -18,10 +18,14 @@ class CompetitionFactory extends Factory
     {
         return [
             'season_id' => \App\Models\Season::factory(),
-            'name' => $this->faker->word . ' Cup',
+            'category_id' => \App\Models\Category::factory(),
+            'league_id' => function (array $attributes) {
+            return \App\Models\Category::find($attributes['category_id'])->league_id;
+        },
+            'name' => 'Competition ' . rand(1000, 9999),
             'status' => 'scheduled',
-            'start_date' => $this->faker->date(),
-            'end_date' => $this->faker->date(),
+            'start_date' => now(),
+            'end_date' => now()->addMonths(3),
         ];
     }
 }

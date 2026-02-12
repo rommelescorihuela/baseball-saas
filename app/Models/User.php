@@ -8,13 +8,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
-class User extends Authenticatable implements HasTenants
+class User extends Authenticatable implements FilamentUser, HasTenants
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
@@ -45,15 +46,17 @@ class User extends Authenticatable implements HasTenants
      *
      * @return array<string, string>
      */
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
     }
 
     public function getTenants(Panel $panel): Collection
@@ -63,7 +66,9 @@ class User extends Authenticatable implements HasTenants
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $this->leagues()->whereKey($tenant)->exists();
+        // For debugging in tests - using error_log as it often shows up in console
+        // error_log("canAccessTenant checking for tenant: " . $tenant->id);
+        return $this->leagues()->whereKey($tenant->getKey())->exists();
     }
 
     public function leagues(): BelongsToMany

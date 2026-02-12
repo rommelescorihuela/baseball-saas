@@ -48,14 +48,16 @@ class AppPanelProvider extends PanelProvider
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
-                \App\Http\Middleware\CheckSubscriptionLimits::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->tenant(League::class)
+            ->tenant(League::class, slugAttribute: 'slug')
+            ->tenantMiddleware([
+                \App\Http\Middleware\CheckSubscriptionLimits::class,
+            ])
             ->tenantMenu(true)
             ->login();
     }

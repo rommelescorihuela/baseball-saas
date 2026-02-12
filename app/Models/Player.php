@@ -9,11 +9,16 @@ class Player extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['team_id', 'name', 'last_name', 'number', 'date_of_birth', 'position'];
+    protected $fillable = ['team_id', 'league_id', 'name', 'last_name', 'number', 'date_of_birth', 'position'];
 
     protected $casts = [
         'date_of_birth' => 'date',
     ];
+
+    public function league()
+    {
+        return $this->belongsTo(League::class);
+    }
 
     public function team()
     {

@@ -11,13 +11,20 @@ class CompetitionController extends Controller
 {
     public function show(Competition $competition)
     {
-        // Standings Logic (simplified for now)
-        // In a real scenario, we'd query the standings table or calculate on fly
-        // For now, let's just show the teams in the competition
-        
         $competition->load(['teams', 'season']);
+        
+        $calculator = new \App\Services\StandingsCalculator($competition);
+        $standings = $calculator->calculate();
 
-        return view('public.competition.show', compact('competition'));
+        // Attach Team models to standings for display
+        $teams = $competition->teams->keyBy('id');
+        
+        $standings = $standings->map(function($standing) use ($teams) {
+             $standing['team'] = $teams->get($standing['team_id']);
+             return $standing;
+        });
+
+        return view('public.competition.show', compact('competition', 'standings'));
     }
 
     public function calendar(Competition $competition)

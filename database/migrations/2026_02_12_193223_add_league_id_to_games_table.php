@@ -10,11 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('competition_id')->constrained()->cascadeOnDelete();
-            $table->string('name'); // e.g., "Sub-12", "Amateur"
-            $table->timestamps();
+        Schema::table('games', function (Blueprint $table) {
+            $table->foreignId('league_id')->after('category_id')->constrained()->cascadeOnDelete();
         });
     }
 
@@ -23,6 +20,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::table('games', function (Blueprint $table) {
+        //
+        });
     }
 };

@@ -10,6 +10,11 @@ class League extends Model
     use HasFactory;
     protected $fillable = ['name', 'slug', 'status', 'logo', 'stripe_id', 'plan', 'subscription_status', 'trial_ends_at', 'subscription_ends_at'];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     protected $casts = [
         'plan' => \App\Enums\Plan::class ,
         'trial_ends_at' => 'datetime',

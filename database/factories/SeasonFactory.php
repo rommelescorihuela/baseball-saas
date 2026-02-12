@@ -18,9 +18,9 @@ class SeasonFactory extends Factory
     {
         return [
             'league_id' => \App\Models\League::factory(),
-            'name' => 'Temporada ' . $this->faker->year,
-            'start_date' => $this->faker->date(),
-            'end_date' => $this->faker->date(),
+            'name' => 'Temporada ' . rand(2025, 2030),
+            'start_date' => now(),
+            'end_date' => now()->addMonths(6),
             'is_active' => true,
         ];
     }

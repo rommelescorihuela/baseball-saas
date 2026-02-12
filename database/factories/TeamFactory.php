@@ -17,7 +17,7 @@ class TeamFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->city . ' ' . $this->faker->word,
+            'name' => 'Team ' . rand(1000, 9999),
             'logo' => null,
             'league_id' => \App\Models\League::factory(),
         ];

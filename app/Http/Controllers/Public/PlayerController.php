@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
-    public function show(Player player)
+    public function show(Player $player)
     {
         $player->load(['team', 'stats.game.homeTeam', 'stats.game.visitorTeam']);
 

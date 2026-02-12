@@ -17,8 +17,8 @@ class LeagueFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company . ' League',
-            'slug' => $this->faker->slug,
+            'name' => 'Test League ' . rand(1, 1000),
+            'slug' => 'test-league-' . rand(1, 1000),
             'status' => 'active',
         ];
     }

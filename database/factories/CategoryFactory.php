@@ -17,8 +17,8 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'competition_id' => \App\Models\Competition::factory(),
-            'name' => $this->faker->randomElement(['Sub-10', 'Sub-12', 'Sub-15', 'Sub-18', 'Amateur', 'Pro']),
+            'league_id' => \App\Models\League::factory(),
+            'name' => ['Sub-10', 'Sub-12', 'Sub-15', 'Sub-18', 'Amateur', 'Pro'][rand(0, 5)],
         ];
     }
 }

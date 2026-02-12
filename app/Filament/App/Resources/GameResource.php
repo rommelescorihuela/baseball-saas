@@ -14,6 +14,8 @@ class GameResource extends Resource
 {
     protected static ?string $model = Game::class;
 
+    protected static ?string $tenantOwnershipRelationshipName = 'league';
+
     // protected static string|\UnitEnum|null $navigationIcon = 'heroicon-o-calendar';
 
     // protected static string|\UnitEnum|null $navigationGroup = 'Competition';
@@ -44,7 +46,7 @@ class GameResource extends Resource
             ])
             ->default('scheduled')
             ->required(),
-            Forms\Components\Grid::make()
+            \Filament\Schemas\Components\Grid::make()
             ->schema([
                 Forms\Components\TextInput::make('home_score')
                 ->numeric()
@@ -93,15 +95,15 @@ class GameResource extends Resource
             //
         ])
             ->actions([
-            Tables\Actions\EditAction::make(),
-            Tables\Actions\Action::make('score')
+            \Filament\Actions\EditAction::make(),
+            \Filament\Actions\Action::make('score')
             ->label('Score')
             ->icon('heroicon-o-play')
             ->url(fn(Game $record): string => Pages\ScoreGame::getUrl(['record' => $record])),
         ])
             ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
+            \Filament\Actions\BulkActionGroup::make([
+                \Filament\Actions\DeleteBulkAction::make(),
             ]),
         ]);
     }

@@ -13,8 +13,10 @@ return new class extends Migration {
         Schema::create('competitions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('season_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('status')->default('scheduled'); // scheduled, active, finished
+            $table->boolean('is_active')->default(false);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();

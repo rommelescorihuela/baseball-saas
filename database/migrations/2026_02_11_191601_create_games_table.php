@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('competition_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('home_team_id')->constrained('teams')->cascadeOnDelete();
             $table->foreignId('visitor_team_id')->constrained('teams')->cascadeOnDelete();

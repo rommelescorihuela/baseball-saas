@@ -18,6 +18,9 @@ class PlayerFactory extends Factory
     {
         return [
             'team_id' => \App\Models\Team::factory(),
+            'league_id' => function (array $attributes) {
+            return \App\Models\Team::find($attributes['team_id'])->league_id;
+        },
             'name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'number' => $this->faker->numberBetween(1, 99),

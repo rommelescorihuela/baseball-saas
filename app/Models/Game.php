@@ -11,6 +11,8 @@ class Game extends Model
 
     protected $fillable = [
         'category_id',
+        'league_id',
+        'competition_id',
         'home_team_id',
         'visitor_team_id',
         'start_time',
@@ -23,6 +25,16 @@ class Game extends Model
     protected $casts = [
         'start_time' => 'datetime',
     ];
+
+    public function competition()
+    {
+        return $this->belongsTo(Competition::class);
+    }
+
+    public function league()
+    {
+        return $this->belongsTo(League::class);
+    }
 
     public function category()
     {
