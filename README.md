@@ -47,13 +47,21 @@ touch database/database.sqlite
 ```
 *Si prefieres MySQL/PostgreSQL, edita las variables `DB_*` en tu archivo `.env`.*
 
-### 5. Ejecutar Migraciones y Setup Inicial
+### 5. Ejecutar Migraciones y Setup de Roles
+El proyecto utiliza **Spatie Laravel Permission** y **Filament Shield** para la gestión de roles y multitenancy.
 ```bash
 php artisan migrate
-php artisan shield:install --panel=admin # Instala roles y permisos base
+php artisan shield:install --panel=admin
 ```
+*Este último comando publicará las configuraciones de Shield y generará los permisos base para los recursos del panel.*
 
-### 6. Instalar dependencias de Frontend y Compilar
+### 6. Configuraciones Importantes
+Asegúrate de revisar los siguientes archivos si realizas cambios estructurales:
+*   **`config/permission.php`**: Configurado para soportar multitenancy (Teams) usando `league_id`.
+*   **`app/Models/User.php`**: Debe incluir el trait `HasRoles` y `HasTenants`.
+*   **`bootstrap/app.php`**: Registro de middlewares globales (si aplica).
+
+### 7. Instalar dependencias de Frontend y Compilar
 ```bash
 npm install
 npm run build
