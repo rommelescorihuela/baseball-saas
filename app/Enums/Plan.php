@@ -34,4 +34,23 @@ enum Plan: string
             self::UNLIMITED => 'Plan Unlimited',
         };
     }
+
+    public function stripePriceId(): ?string
+    {
+        return match ($this) {
+            self::FREE => null,
+            self::PRO => env('STRIPE_PRICE_PRO'),
+            self::UNLIMITED => env('STRIPE_PRICE_UNLIMITED'),
+        };
+    }
+
+    public static function fromPriceId(string $priceId): ?self
+    {
+        foreach (self::cases() as $case) {
+            if ($case->stripePriceId() === $priceId) {
+                return $case;
+            }
+        }
+        return null;
+    }
 }

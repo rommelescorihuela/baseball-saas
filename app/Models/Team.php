@@ -15,6 +15,11 @@ class Team extends Model
         return $this->belongsTo(League::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'team_user');
+    }
+
     public function players()
     {
         return $this->belongsToMany(Player::class , 'team_player_season')->withPivot('season_id');

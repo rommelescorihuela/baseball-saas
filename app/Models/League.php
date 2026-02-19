@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Cashier\Billable;
 
 class League extends Model
 {
-    use HasFactory;
+    use HasFactory, Billable;
     protected $fillable = ['name', 'slug', 'status', 'logo', 'stripe_id', 'plan', 'subscription_status', 'trial_ends_at', 'subscription_ends_at'];
 
     public function getRouteKeyName()

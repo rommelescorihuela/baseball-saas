@@ -24,12 +24,30 @@ class TeamResource extends Resource
     {
         return $schema
             ->schema([
-                \Filament\Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                \Filament\Forms\Components\FileUpload::make('logo')
-                    ->image()
-                    ->directory('teams/logos'),
+                \Filament\Schemas\Components\Section::make('Detalles del Equipo')
+                    ->schema([
+                        \Filament\Forms\Components\TextInput::make('name')
+                            ->label('Nombre del Equipo')
+                            ->required()
+                            ->maxLength(255),
+                        \Filament\Forms\Components\FileUpload::make('logo')
+                            ->image()
+                            ->directory('teams/logos'),
+                    ]),
+                \Filament\Schemas\Components\Section::make('Encargado del Equipo (Manager)')
+                    ->description('Se enviará una invitación a este correo.')
+                    ->schema([
+                        \Filament\Forms\Components\TextInput::make('owner_name')
+                            ->label('Nombre del Encargado')
+                            ->required(fn (string $operation) => $operation === 'create')
+                            ->maxLength(255),
+                        \Filament\Forms\Components\TextInput::make('owner_email')
+                            ->label('Correo Electrónico')
+                            ->email()
+                            ->required(fn (string $operation) => $operation === 'create')
+                            ->maxLength(255),
+                    ])
+                    ->visible(fn (string $operation) => $operation === 'create'),
             ]);
     }
 
@@ -65,7 +83,7 @@ class TeamResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager::class,
         ];
     }
 

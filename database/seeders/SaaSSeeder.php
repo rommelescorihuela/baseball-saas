@@ -32,6 +32,22 @@ class SaaSSeeder extends Seeder
                 'league_id' => $league->id,
             ]);
 
+            // Crear 4 Categorías por Liga
+            $categories = Category::factory()->count(4)->create([
+                'league_id' => $league->id,
+            ]);
+
+            // Distribuir equipos en las categorías (3 equipos por categoría)
+            $shuffledTeams = $teams->shuffle();
+            $chunks = $shuffledTeams->split($categories->count());
+
+            foreach ($categories as $index => $category) {
+                $teamsInCat = $chunks->get($index);
+                if ($teamsInCat) {
+                    $category->teams()->attach($teamsInCat);
+                }
+            }
+
             foreach ($teams as $team) {
                 \App\Models\Player::factory()->count(15)->create([
                     'team_id' => $team->id,
@@ -40,49 +56,33 @@ class SaaSSeeder extends Seeder
 
             // Crear 2 Temporadas (1 Activa, 1 Inactiva)
             $seasons = Season::factory()->count(2)->sequence(
-            ['is_active' => true, 'name' => 'Season 2026'],
-            ['is_active' => false, 'name' => 'Season 2025']
+                ['is_active' => true, 'name' => 'Season 2026'],
+                ['is_active' => false, 'name' => 'Season 2025']
             )->create([
                 'league_id' => $league->id,
             ]);
 
             foreach ($seasons as $season) {
-                // Crear 2 Competencias por Temporada
-                $competitions = Competition::factory()->count(2)->create([
-                    'season_id' => $season->id,
-                ]);
-
-                foreach ($competitions as $competition) {
-                    // Crear 4 Categorías por Competencia
-                    $categories = Category::factory()->count(4)->create([
-                        'competition_id' => $competition->id,
+                // Crear Competencias por Categoría para la Temporada
+                foreach ($categories as $category) {
+                    $competition = Competition::factory()->create([
+                        'season_id' => $season->id,
+                        'category_id' => $category->id,
+                        'name' => 'Torneo ' . $category->name,
                     ]);
 
-                    // Distribuir equipos en las categorías (3 equipos por categoría)
-                    $shuffledTeams = $teams->shuffle();
-                    $chunks = $shuffledTeams->split($categories->count());
-
-                    foreach ($categories as $index => $category) {
-                        $teamsInCat = $chunks->get($index);
-
-                        if ($teamsInCat) {
-                            // Inscribir equipos en la categoría
-                            $category->teams()->attach($teamsInCat);
-
-                            // Generar Roster para la Temporada
-                            foreach ($teamsInCat as $team) {
-                                foreach ($team->players as $player) {
-                                    \Illuminate\Support\Facades\DB::table('team_player_season')->insertOrIgnore([
-                                        'team_id' => $team->id,
-                                        'player_id' => $player->id,
-                                        'season_id' => $season->id,
-                                        'number' => $player->number,
-                                        'position' => $player->position,
-                                        'created_at' => now(),
-                                        'updated_at' => now(),
-                                    ]);
-                                }
-                            }
+                    // Generar Roster para la Temporada (usando los equipos de la categoría)
+                    foreach ($category->teams as $team) {
+                        foreach ($team->players as $player) {
+                            \Illuminate\Support\Facades\DB::table('team_player_season')->insertOrIgnore([
+                                'team_id' => $team->id,
+                                'player_id' => $player->id,
+                                'season_id' => $season->id,
+                                'number' => $player->number,
+                                'position' => $player->position,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
                         }
                     }
                 }
