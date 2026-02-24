@@ -18,7 +18,21 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Rol Global (Para ti, el dueño del SaaS)
         // Este rol NO lleva league_id porque supervisa todo el sistema
-        Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        // 1. Rol Global (Para ti, el dueño del SaaS)
+        // Este rol NO lleva league_id porque supervisa todo el sistema
+        $superAdminRole = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+
+        // Crear Super Usuario
+        $superAdmin = User::firstOrCreate(
+            ['email' => 'superadmin@baseball-saas.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => bcrypt('password'), // Cambiar en producción
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $superAdmin->assignRole($superAdminRole);
 
         // 2. Roles de la Liga (Para tus clientes y sus usuarios)
         // Shield los usará dentro del contexto de cada Tenant

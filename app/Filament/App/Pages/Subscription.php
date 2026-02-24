@@ -2,84 +2,71 @@
 
 namespace App\Filament\App\Pages;
 
-use App\Models\League;
 use App\Enums\Plan;
-use Filament\Pages\Page;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
 use Filament\Facades\Filament;
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
+use Filament\Pages\Page;
+use Illuminate\Support\Facades\Auth;
 
 class Subscription extends Page
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-credit-card';
 
     protected string $view = 'filament.app.pages.subscription';
 
-    protected static ?string $title = 'Mi Suscripción';
+    protected static ?string $navigationLabel = 'Suscripción';
 
-    public League $league;
+    protected static ?string $title = 'Suscripción y Pagos';
 
-    public function mount()
+    public static function canAccess(): bool
     {
-        $this->league = Filament::getTenant();
+        $tenant = Filament::getTenant();
+        // Only League Owner can manage subscription
+        return $tenant && Auth::user()->hasRole('league_owner') && $tenant->users()->where('user_id', Auth::id())->exists();
     }
 
-    protected function getHeaderActions(): array
+    public function subscribe(string $planName)
     {
-        return [
-            Action::make('upgrade_pro')
-                ->label('Mejorar a Pro')
-                ->color('success')
-                ->hidden(fn () => $this->league->plan === Plan::PRO || $this->league->plan === Plan::UNLIMITED)
-                ->action(fn () => $this->checkout(Plan::PRO)),
-
-            Action::make('upgrade_unlimited')
-                ->label('Mejorar a Unlimited')
-                ->color('primary')
-                ->hidden(fn () => $this->league->plan === Plan::UNLIMITED)
-                ->action(fn () => $this->checkout(Plan::UNLIMITED)),
-        ];
-    }
-
-    public function checkout(Plan $plan)
-    {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
-        // Mock price IDs - In real app, these would be in Config or Plan Enum
-        $priceId = match($plan) {
-            Plan::PRO => 'price_pro_placeholder',
-            Plan::UNLIMITED => 'price_unlimited_placeholder',
-            default => null,
-        };
-
-        if (!$priceId) {
-            Notification::make()->title('Error en el plan seleccionado')->danger()->send();
+        $plan = Plan::tryFrom($planName);
+        if (!$plan || !$plan->stripePriceId()) {
             return;
         }
 
-        try {
-            $session = \Stripe\Checkout\Session::create([
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price' => $priceId,
-                    'quantity' => 1,
-                ]],
-                'mode' => 'subscription',
-                'success_url' => route('filament.app.pages.subscription', ['tenant' => $this->league->slug]) . '?success=true',
-                'cancel_url' => route('filament.app.pages.subscription', ['tenant' => $this->league->slug]) . '?cancel=true',
-                'client_reference_id' => $this->league->id,
-                'customer_email' => $this->league->users()->first()?->email,
-            ]);
+        $league = Filament::getTenant();
 
-            return redirect($session->url);
-        } catch (\Exception $e) {
-            Notification::make()
-                ->title('Error al conectar con Stripe')
-                ->body($e->getMessage())
-                ->danger()
-                ->send();
+        // If already on this plan, do nothing or show message
+        if ($league->subscribed('default') && $league->subscription('default')->hasPrice($plan->stripePriceId())) {
+            return;
         }
+        
+        // If already subscribed to another plan, swap
+        if ($league->subscribed('default')) {
+            $league->subscription('default')->swap($plan->stripePriceId());
+            return redirect()->route('filament.app.pages.subscription');
+        }
+
+        // New Subscription
+        return $league->newSubscription('default', $plan->stripePriceId())
+            ->checkout([
+                'success_url' => route('filament.app.pages.subscription', ['tenant' => $league]),
+                'cancel_url' => route('filament.app.pages.subscription', ['tenant' => $league]),
+            ]);
+    }
+
+    public function manage()
+    {
+        $league = Filament::getTenant();
+        return $league->billingPortalUrl(route('filament.app.pages.subscription', ['tenant' => $league]));
+    }
+
+    protected function getViewData(): array
+    {
+        $league = Filament::getTenant();
+        
+        return [
+            'plans' => Plan::cases(),
+            'currentPlan' => $league->subscribed('default') ? $league->subscription('default')->type : 'free', // Or derive from stripe price
+            'isSubscribed' => $league->subscribed('default'),
+            'onGracePeriod' => $league->subscribed('default') && $league->subscription('default')->onGracePeriod(),
+        ];
     }
 }

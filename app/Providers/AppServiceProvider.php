@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Laravel\Cashier\Cashier::useCustomerModel(\App\Models\League::class);
         \App\Models\GameEvent::observe(\App\Observers\GameEventObserver::class);
     }
 }

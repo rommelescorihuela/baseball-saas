@@ -66,13 +66,20 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function canAccessTenant(Model $tenant): bool
     {
-        // For debugging in tests - using error_log as it often shows up in console
-        // error_log("canAccessTenant checking for tenant: " . $tenant->id);
+        if ($this->hasRole('super_admin')) {
+            return true;
+        }
+
         return $this->leagues()->whereKey($tenant->getKey())->exists();
     }
 
     public function leagues(): BelongsToMany
     {
         return $this->belongsToMany(League::class);
+    }
+
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'team_user');
     }
 }

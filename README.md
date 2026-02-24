@@ -8,7 +8,7 @@ Una plataforma SaaS moderna para la gestión de ligas, equipos, jugadores y comp
 *   **Composer**: 2.0 o superior
 *   **Node.js**: 18.x o superior & NPM
 *   **Base de Datos**: SQLite (por defecto), MySQL 8.0+, o PostgreSQL 15+
-*   **Extensiones PHP**: `dom`, `curl`, `libxml`, `mbstring`, `zip`, `pcntl`, `pcre`, `sqlite3`, `gd`.
+*   **Extensiones PHP**: `dom`, `curl`, `libxml`, `mbstring`, `zip`, `pcntl`, `pcre`, `sqlite3`, `gd`, `bcmath`, `intl`.
 
 ## 🚀 Instalación en un Nuevo Servidor
 
@@ -28,9 +28,10 @@ git clone <url-del-repositorio> baseball-saas
 cd baseball-saas
 ```
 
-### 2. Instalar dependencias de PHP
+### 2. Instalar dependencias
 ```bash
-composer install
+composer install --no-dev --optimize-autoloader
+npm install && npm run build
 ```
 
 ### 3. Configurar el entorno
@@ -38,85 +39,90 @@ Copia el archivo de ejemplo y genera la clave de la aplicación:
 ```bash
 cp .env.example .env
 php artisan key:generate
-```
-
-### 4. Configurar la Base de Datos
-Por defecto, el proyecto usa SQLite. Si deseas usarlo, crea el archivo:
-```bash
-touch database/database.sqlite
-```
-*Si prefieres MySQL/PostgreSQL, edita las variables `DB_*` en tu archivo `.env`.*
-
-### 5. Ejecutar Migraciones y Setup de Roles
-El proyecto utiliza **Spatie Laravel Permission** y **Filament Shield** para la gestión de roles y multitenancy.
-```bash
-php artisan migrate
-php artisan shield:install --panel=admin
-```
-*Este último comando publicará las configuraciones de Shield y generará los permisos base para los recursos del panel.*
-
-### 6. Configuraciones Importantes
-Asegúrate de revisar los siguientes archivos si realizas cambios estructurales:
-*   **`config/permission.php`**: Configurado para soportar multitenancy (Teams) usando `league_id`.
-*   **`app/Models/User.php`**: Debe incluir el trait `HasRoles` y `HasTenants`.
-*   **`bootstrap/app.php`**: Registro de middlewares globales (si aplica).
-
-### 7. Instalar dependencias de Frontend y Compilar
-```bash
-npm install
-npm run build
-```
-
-### 7. Enlace de Almacenamiento
-```bash
 php artisan storage:link
 ```
 
----
+### 4. Configurar la Base de Datos
+Edita las variables `DB_*` en tu archivo `.env` para conectar con tu base de datos (PostgreSQL recomendado para producción).
 
-## 🎮 Ejecución del Demo (Datos Funcionales)
-
-Para que todos los módulos sean funcionales y tengan datos de prueba (Ligas, Equipos, Jugadores, Temporadas, etc.), utiliza el `SaaSSeeder`:
-
-```bash
-php artisan db:seed --class=SaaSSeeder
+### 5. Configurar Stripe (Pagos)
+Asegúrate de configurar las siguientes variables en tu `.env`:
+```env
+STRIPE_KEY=pk_live_...
+STRIPE_SECRET=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+CASHIER_CURRENCY=usd
 ```
 
-Este comando generará:
-*   5 Ligas de ejemplo.
-*   Usuarios propietarios para cada liga.
-*   12 Equipos por cada liga.
-*   15 Jugadores por cada equipo.
-*   Temporadas y Competencias activas con categorías configuradas.
+### 6. Ejecutar Migraciones y Setup
+El proyecto utiliza **Spatie Laravel Permission**, **Filament Shield** y **Laravel Cashier**.
 
-### Credenciales por Defecto
-*   **Super Admin**: Crea uno rápidamente con `php artisan make:filament-user`.
-*   **Owners de Ligas (Demo)**:
-    *   **Email**: `owner@liga-demo.com` (si corres `DemoSeeder`) o `owner@<slug-de-liga>.com` (si corres `SaaSSeeder`).
-    *   **Password**: `password`
+```bash
+php artisan migrate --force
+php artisan shield:generate --all --panel=admin
+php artisan filament:assets
+php artisan filament:optimize
+```
+
+### 7. Popular la Base de Datos (Opcional)
+Para crear roles base y un super usuario inicial:
+```bash
+php artisan db:seed --class=DatabaseSeeder
+```
 
 ---
 
-## 🛠️ Comandos de Desarrollo
+## ☁️ Notas de Despliegue (Producción)
 
-*   **Servidor local**: `php artisan serve`
-*   **Vite (HMR)**: `npm run dev`
-*   **Ejecutar Pruebas**: `php artisan test`
-*   **Limpiar Cache**: `php artisan optimize:clear`
+### 1. Colas de Trabajo (Queues)
+El sistema utiliza colas para el envío de correos y procesamiento de eventos de Stripe. Debes configurar un proceso **Supervisor** para mantener corriendo el worker:
 
-## 🌐 Notas de Despliegue (Producción)
+```ini
+[program:baseball-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /path/to/project/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/path/to/project/storage/logs/worker.log
+```
 
-1.  **Permisos de Carpetas**: Asegúrate de que `storage` y `bootstrap/cache` tengan permisos de escritura para el usuario del servidor web (ej. `www-data`).
-    ```bash
-    sudo chown -R www-data:www-data storage bootstrap/cache
-    ```
-2.  **Configuración de Nginx**: Asegúrate de apuntar el `root` a la carpeta `/public` del proyecto.
-3.  **Variables de Entorno**: Cambia `APP_ENV=production` y `APP_DEBUG=false` en el `.env`.
-4.  **Optimización**:
-    ```bash
-    php artisan optimize
-    npm run build
-    ```
+### 2. Tareas Programadas (Cron)
+Agrega la siguiente entrada al crontab del usuario del servidor:
+```bash
+* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+### 3. Webhooks de Stripe
+Configura un punto final en el Dashboard de Stripe apuntando a:
+`https://tu-dominio.com/stripe/webhook`
+Eventos requeridos: `customer.subscription.updated`, `customer.subscription.deleted`, `customer.subscription.created`.
+
+### 4. Permisos de Carpetas
+Asegúrate de que `storage` y `bootstrap/cache` tengan permisos de escritura:
+```bash
+sudo chown -R www-data:www-data storage bootstrap/cache
+```
+
+### 5. Optimización
+Una vez configurado todo, ejecuta:
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### 6. Configuración de Nginx
+Asegúrate de apuntar el `root` a la carpeta `/public` del proyecto en tu configuración del servidor web.
+
+### 7. Variables de Producción
+En tu archivo `.env`, asegúrate de establecer:
+```env
+APP_ENV=production
+APP_DEBUG=false
+```
 
 ---
 
