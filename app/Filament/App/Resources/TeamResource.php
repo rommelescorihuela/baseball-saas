@@ -2,15 +2,10 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Filament\App\Resources\Players\PlayerResource\Pages;
 use App\Models\Team;
-use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TeamResource extends Resource
 {
@@ -84,6 +79,7 @@ class TeamResource extends Resource
     {
         return [
             \App\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager::class,
+            \App\Filament\App\Resources\TeamResource\RelationManagers\SeasonRosterRelationManager::class,
         ];
     }
 

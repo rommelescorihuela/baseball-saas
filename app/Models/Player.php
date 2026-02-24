@@ -9,7 +9,7 @@ class Player extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['team_id', 'league_id', 'name', 'last_name', 'number', 'date_of_birth', 'position'];
+    protected $fillable = ['team_id', 'league_id', 'name', 'last_name', 'number', 'date_of_birth', 'position', 'created_by'];
 
     protected $casts = [
         'date_of_birth' => 'date',
@@ -23,6 +23,24 @@ class Player extends Model
     public function team()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    /**
+     * Usuario que creó el registro (Secretaría/Coach)
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Equipos a los que pertenece el jugador (a través de temporadas)
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_player_season')
+            ->withPivot('season_id', 'number', 'position')
+            ->withTimestamps();
     }
 
     public function stats()

@@ -8,12 +8,179 @@ class PlayerSeasonStat extends Model
 {
     protected $guarded = [];
 
-    public function getAvgAttribute()
-    {
-        if ($this->ab == 0)
-            return '.000';
+    protected $casts = [
+        'ip' => 'decimal:1',
+    ];
 
-        $avg = $this->h / $this->ab;
-        return number_format($avg, 3, '.', ''); // .350
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    public function player()
+    {
+        return $this->belongsTo(Player::class);
+    }
+
+    public function season()
+    {
+        return $this->belongsTo(Season::class);
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Batting Calculated Attributes
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Batting Average: H / AB
+     */
+    public function getAvgAttribute(): string
+    {
+        if ($this->ab == 0) {
+            return '.000';
+        }
+
+        return number_format($this->h / $this->ab, 3, '.', '');
+    }
+
+    /**
+     * On-Base Percentage: (H + BB + HBP) / (AB + BB + HBP + SF)
+     */
+    public function getObpAttribute(): string
+    {
+        $numerator = $this->h + $this->bb + $this->hbp;
+        $denominator = $this->ab + $this->bb + $this->hbp + $this->sf;
+
+        if ($denominator == 0) {
+            return '.000';
+        }
+
+        return number_format($numerator / $denominator, 3, '.', '');
+    }
+
+    /**
+     * Slugging Percentage: (1B + 2*2B + 3*3B + 4*HR) / AB
+     */
+    public function getSlgAttribute(): string
+    {
+        if ($this->ab == 0) {
+            return '.000';
+        }
+
+        $totalBases = $this->h + $this->doubles + (2 * $this->triples) + (3 * $this->hr);
+
+        return number_format($totalBases / $this->ab, 3, '.', '');
+    }
+
+    /**
+     * On-Base Plus Slugging
+     */
+    public function getOpsAttribute(): string
+    {
+        return number_format((float) $this->obp + (float) $this->slg, 3, '.', '');
+    }
+
+    /**
+     * Total Bases
+     */
+    public function getTbAttribute(): int
+    {
+        return $this->h + $this->doubles + (2 * $this->triples) + (3 * $this->hr);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pitching Calculated Attributes
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Earned Run Average: (ER / IP) * 9
+     */
+    public function getEraAttribute(): string
+    {
+        if ($this->ip == 0) {
+            return '0.00';
+        }
+
+        return number_format(($this->er / $this->ip) * 9, 2, '.', '');
+    }
+
+    /**
+     * Walks plus Hits per Inning Pitched: (H + BB) / IP
+     */
+    public function getWhipAttribute(): string
+    {
+        if ($this->ip == 0) {
+            return '0.00';
+        }
+
+        return number_format(($this->p_h + $this->p_bb) / $this->ip, 2, '.', '');
+    }
+
+    /**
+     * Opponent Batting Average: H / (IP * 3)
+     */
+    public function getOppAvgAttribute(): string
+    {
+        $battersFaced = $this->ip * 3; // Approximate
+        if ($battersFaced == 0) {
+            return '.000';
+        }
+
+        return number_format($this->p_h / $battersFaced, 3, '.', '');
+    }
+
+    /**
+     * Strikeouts per 9 innings
+     */
+    public function getSo9Attribute(): string
+    {
+        if ($this->ip == 0) {
+            return '0.0';
+        }
+
+        return number_format(($this->p_so / $this->ip) * 9, 1, '.', '');
+    }
+
+    /**
+     * Walks per 9 innings
+     */
+    public function getBb9Attribute(): string
+    {
+        if ($this->ip == 0) {
+            return '0.0';
+        }
+
+        return number_format(($this->p_bb / $this->ip) * 9, 1, '.', '');
+    }
+
+    /**
+     * Win-Loss Record string (e.g., "5-2")
+     */
+    public function getRecordAttribute(): string
+    {
+        return "{$this->w}-{$this->l}";
+    }
+
+    /**
+     * Save percentage
+     */
+    public function getSvPercentAttribute(): string
+    {
+        $saveOps = $this->sv + ($this->bs ?? 0);
+        if ($saveOps == 0) {
+            return '0.0';
+        }
+
+        return number_format(($this->sv / $saveOps) * 100, 1, '.', '');
     }
 }

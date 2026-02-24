@@ -19,6 +19,7 @@ class GameEvent extends Model
         'type',
         'result',
         'runs_scored',
+        'created_by',
     ];
 
     protected $casts = [
@@ -38,11 +39,19 @@ class GameEvent extends Model
 
     public function batter()
     {
-        return $this->belongsTo(Player::class , 'batter_id');
+        return $this->belongsTo(Player::class, 'batter_id');
     }
 
     public function pitcher()
     {
-        return $this->belongsTo(Player::class , 'pitcher_id');
+        return $this->belongsTo(Player::class, 'pitcher_id');
+    }
+
+    /**
+     * Usuario que registró el evento (Coach)
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

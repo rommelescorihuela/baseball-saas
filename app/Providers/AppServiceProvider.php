@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-    //
+        //
     }
 
     /**
@@ -20,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Laravel\Cashier\Cashier::useCustomerModel(\App\Models\League::class);
+
+        // Observers para cálculo automático de estadísticas
         \App\Models\GameEvent::observe(\App\Observers\GameEventObserver::class);
+        \App\Models\Game::observe(\App\Observers\GameObserver::class);
     }
 }

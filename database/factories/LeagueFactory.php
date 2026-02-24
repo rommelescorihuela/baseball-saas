@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\League>
@@ -16,10 +17,14 @@ class LeagueFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->company.' League';
+
         return [
-            'name' => 'Test League ' . rand(1, 1000),
-            'slug' => 'test-league-' . rand(1, 1000),
+            'name' => $name,
+            'slug' => Str::slug($name).'-'.Str::random(8),
             'status' => 'active',
+            'plan' => 'free',
+            'subscription_status' => 'active',
         ];
     }
 }

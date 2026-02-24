@@ -20,6 +20,14 @@ class PlayerResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $navigationLabel = 'Jugadores';
+
+    protected static ?string $modelLabel = 'Jugador';
+
+    protected static ?string $pluralModelLabel = 'Jugadores';
+
+    protected static ?string $tenantOwnershipRelationshipName = 'league';
+
     public static function form(Schema $schema): Schema
     {
         return PlayerForm::configure($schema);
