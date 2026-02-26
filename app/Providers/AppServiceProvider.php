@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        \Laravel\Cashier\Cashier::useCustomerModel(\App\Models\League::class);
+        View::addNamespace('layouts', resource_path('views/components/layouts'));
+
 
         // Observers para cálculo automático de estadísticas
         \App\Models\GameEvent::observe(\App\Observers\GameEventObserver::class);

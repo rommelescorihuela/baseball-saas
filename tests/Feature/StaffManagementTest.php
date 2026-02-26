@@ -16,12 +16,17 @@ class StaffManagementTest extends TestCase
 {
     public function test_team_owner_can_manage_staff()
     {
-        // Ensure roles exist
         if (!Role::where('name', 'league_owner')->exists()) {
-             Role::create(['name' => 'league_owner', 'guard_name' => 'web']);
+            Role::create(['name' => 'league_owner', 'guard_name' => 'web']);
         }
         if (!Role::where('name', 'team_owner')->exists()) {
-             Role::create(['name' => 'team_owner', 'guard_name' => 'web']);
+            Role::create(['name' => 'team_owner', 'guard_name' => 'web']);
+        }
+        if (!Role::where('name', 'coach')->exists()) {
+            Role::create(['name' => 'coach', 'guard_name' => 'web']);
+        }
+        if (!Role::where('name', 'secretary')->exists()) {
+            Role::create(['name' => 'secretary', 'guard_name' => 'web']);
         }
 
         // Create League
@@ -57,14 +62,14 @@ class StaffManagementTest extends TestCase
             'ownerRecord' => $team,
             'pageClass' => TeamResource\Pages\EditTeam::class,
         ])
-        ->assertSuccessful()
-        ->assertTableActionExists('create')
-        ->callTableAction('create', null, [
-            'name' => 'New Staff',
-            'email' => 'staff' . uniqid() . '@test.com',
-            'password' => 'password',
-        ])
-        ->assertHasNoErrors();
+            ->assertSuccessful()
+            ->assertTableActionExists('create')
+            ->callTableAction('create', null, [
+                'name' => 'New Staff',
+                'email' => 'staff' . uniqid() . '@test.com',
+                'password' => 'password',
+            ])
+            ->assertHasNoErrors();
 
         // Assert Staff Created and Attached
         $this->assertEquals(2, $team->users()->count()); // Owner + New Staff

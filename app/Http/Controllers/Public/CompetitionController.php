@@ -12,16 +12,16 @@ class CompetitionController extends Controller
     public function show(Competition $competition)
     {
         $competition->load(['teams', 'season']);
-        
+
         $calculator = new \App\Services\StandingsCalculator($competition);
         $standings = $calculator->calculate();
 
         // Attach Team models to standings for display
         $teams = $competition->teams->keyBy('id');
-        
-        $standings = $standings->map(function($standing) use ($teams) {
-             $standing['team'] = $teams->get($standing['team_id']);
-             return $standing;
+
+        $standings = $standings->map(function ($standing) use ($teams) {
+            $standing['team'] = $teams->get($standing['team_id']);
+            return $standing;
         });
 
         return view('public.competition.show', compact('competition', 'standings'));
@@ -29,9 +29,10 @@ class CompetitionController extends Controller
 
     public function calendar(Competition $competition)
     {
-        $games = Game::whereHas('category', function($q) use ($competition) {
-                $q->where('competition_id', $competition->id);
-            })
+        $games = Game::whereHas('category', function ($q) use ($competition) {
+            $q->where('competition_id', $competition->id);
+        })
+            ->with(['homeTeam', 'visitorTeam', 'category'])
             ->orderBy('start_time', 'asc')
             ->paginate(20);
 

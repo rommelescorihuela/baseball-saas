@@ -22,8 +22,7 @@ class LeagueInfolist
                 TextEntry::make('updated_at')
                     ->dateTime()
                     ->placeholder('-'),
-                TextEntry::make('stripe_id')
-                    ->placeholder('-'),
+
                 TextEntry::make('plan')
                     ->badge(),
                 TextEntry::make('subscription_status'),

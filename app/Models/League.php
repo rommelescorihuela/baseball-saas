@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Cashier\Billable;
+
 
 class League extends Model
 {
-    use HasFactory, Billable;
-    protected $fillable = ['name', 'slug', 'status', 'logo', 'stripe_id', 'plan', 'subscription_status', 'trial_ends_at', 'subscription_ends_at'];
+    use HasFactory;
+    protected $fillable = ['name', 'slug', 'status', 'logo', 'plan', 'subscription_status', 'trial_ends_at', 'subscription_ends_at'];
 
     public function getRouteKeyName()
     {
@@ -17,7 +17,7 @@ class League extends Model
     }
 
     protected $casts = [
-        'plan' => \App\Enums\Plan::class ,
+        'plan' => \App\Enums\Plan::class,
         'trial_ends_at' => 'datetime',
         'subscription_ends_at' => 'datetime',
     ];
@@ -25,13 +25,20 @@ class League extends Model
     public function isSubscribed(): bool
     {
         if ($this->plan === \App\Enums\Plan::FREE) {
-            return true; // Technically "subscribed" to free plan
+            return true;
         }
 
+        // Canceled is immediate block
+        if ($this->subscription_status === 'canceled') {
+            return false;
+        }
+
+        // Active or Trialing is immediate access
         if ($this->subscription_status === 'active' || $this->subscription_status === 'trialing') {
             return true;
         }
 
+        // If past_due, it only works if the expiration date is still in the future (grace period)
         return $this->subscription_ends_at && $this->subscription_ends_at->isFuture();
     }
 

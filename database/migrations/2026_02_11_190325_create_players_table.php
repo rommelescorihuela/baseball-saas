@@ -12,12 +12,14 @@ return new class extends Migration {
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('league_id')->constrained()->cascadeOnDelete();
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('last_name')->nullable();
             $table->integer('number')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('position')->nullable(); // P, C, 1B, etc.
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

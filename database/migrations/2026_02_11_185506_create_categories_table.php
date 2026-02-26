@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('league_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('league_id')->constrained()->cascadeOnDelete()->index('idx_cat_league');
             $table->string('name'); // e.g., "Sub-12", "Amateur"
             $table->timestamps();
         });

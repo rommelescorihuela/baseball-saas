@@ -41,7 +41,7 @@ class PlayerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\App\Resources\Players\RelationManagers\CurrentStatsRelationManager::class,
         ];
     }
 
@@ -50,6 +50,7 @@ class PlayerResource extends Resource
         return [
             'index' => ListPlayers::route('/'),
             'create' => CreatePlayer::route('/create'),
+            'view' => \App\Filament\App\Resources\Players\Pages\ViewPlayer::route('/{record}'),
             'edit' => EditPlayer::route('/{record}/edit'),
         ];
     }

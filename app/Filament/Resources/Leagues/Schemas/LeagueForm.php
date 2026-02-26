@@ -17,7 +17,7 @@ class LeagueForm
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (string $operation, $state, $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
+                            ->afterStateUpdated(fn(string $operation, $state, $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
 
                         \Filament\Forms\Components\TextInput::make('slug')
                             ->required()
@@ -37,6 +37,21 @@ class LeagueForm
                             ->options(\App\Enums\Plan::class)
                             ->default(\App\Enums\Plan::FREE)
                             ->required(),
+
+                        \Filament\Forms\Components\Select::make('subscription_status')
+                            ->label('Estatus de Suscripción')
+                            ->options([
+                                'active' => 'Activa',
+                                'past_due' => 'Pendiente de Pago',
+                                'canceled' => 'Cancelada',
+                                'trialing' => 'En Período de Prueba',
+                            ])
+                            ->default('active')
+                            ->required(),
+
+                        \Filament\Forms\Components\DateTimePicker::make('subscription_ends_at')
+                            ->label('Fecha de Expiración')
+                            ->hint('Fecha hasta la cual la liga tiene acceso premium.'),
                     ])->columns(2),
 
                 \Filament\Schemas\Components\Section::make('Administrador de la Liga (Owner)')
@@ -44,13 +59,13 @@ class LeagueForm
                     ->schema([
                         \Filament\Forms\Components\TextInput::make('owner_name')
                             ->label('Nombre del Admin')
-                            ->required(fn (string $operation) => $operation === 'create')
+                            ->required(fn(string $operation) => $operation === 'create')
                             ->maxLength(255),
 
                         \Filament\Forms\Components\TextInput::make('owner_email')
                             ->label('Correo Electrónico')
                             ->email()
-                            ->required(fn (string $operation) => $operation === 'create')
+                            ->required(fn(string $operation) => $operation === 'create')
                             ->maxLength(255)
                             ->unique('users', 'email', ignoreRecord: true),
 
@@ -58,10 +73,10 @@ class LeagueForm
                             ->label('Contraseña Inicial')
                             ->password()
                             ->revealable()
-                            ->required(fn (string $operation) => $operation === 'create')
+                            ->required(fn(string $operation) => $operation === 'create')
                             ->minLength(8),
                     ])->columns(2)
-                    ->visible(fn (string $operation) => $operation === 'create'),
+                    ->visible(fn(string $operation) => $operation === 'create'),
             ]);
     }
 }

@@ -24,49 +24,15 @@ class Subscription extends Page
         return $tenant && Auth::user()->hasRole('league_owner') && $tenant->users()->where('user_id', Auth::id())->exists();
     }
 
-    public function subscribe(string $planName)
-    {
-        $plan = Plan::tryFrom($planName);
-        if (!$plan || !$plan->stripePriceId()) {
-            return;
-        }
-
-        $league = Filament::getTenant();
-
-        // If already on this plan, do nothing or show message
-        if ($league->subscribed('default') && $league->subscription('default')->hasPrice($plan->stripePriceId())) {
-            return;
-        }
-        
-        // If already subscribed to another plan, swap
-        if ($league->subscribed('default')) {
-            $league->subscription('default')->swap($plan->stripePriceId());
-            return redirect()->route('filament.app.pages.subscription');
-        }
-
-        // New Subscription
-        return $league->newSubscription('default', $plan->stripePriceId())
-            ->checkout([
-                'success_url' => route('filament.app.pages.subscription', ['tenant' => $league]),
-                'cancel_url' => route('filament.app.pages.subscription', ['tenant' => $league]),
-            ]);
-    }
-
-    public function manage()
-    {
-        $league = Filament::getTenant();
-        return $league->billingPortalUrl(route('filament.app.pages.subscription', ['tenant' => $league]));
-    }
-
     protected function getViewData(): array
     {
         $league = Filament::getTenant();
-        
+
         return [
             'plans' => Plan::cases(),
-            'currentPlan' => $league->subscribed('default') ? $league->subscription('default')->type : 'free', // Or derive from stripe price
-            'isSubscribed' => $league->subscribed('default'),
-            'onGracePeriod' => $league->subscribed('default') && $league->subscription('default')->onGracePeriod(),
+            'currentPlan' => $league->plan,
+            'status' => $league->subscription_status,
+            'expiration' => $league->subscription_ends_at,
         ];
     }
 }

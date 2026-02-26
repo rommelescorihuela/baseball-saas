@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('league_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('league_id')->constrained()->cascadeOnDelete()->index('idx_teams_league');
             $table->string('name');
             $table->string('logo')->nullable();
             $table->timestamps();

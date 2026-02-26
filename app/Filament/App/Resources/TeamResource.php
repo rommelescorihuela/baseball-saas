@@ -15,6 +15,20 @@ class TeamResource extends Resource
 
     protected static ?string $tenantOwnershipRelationshipName = 'league';
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (auth()->check() && auth()->user()->hasRole('coach')) {
+            $query->whereHas('users', function ($q) {
+                $q->where('users.id', auth()->id());
+            });
+        }
+
+        return $query;
+    }
+
+
     public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
         return $schema
@@ -34,15 +48,15 @@ class TeamResource extends Resource
                     ->schema([
                         \Filament\Forms\Components\TextInput::make('owner_name')
                             ->label('Nombre del Encargado')
-                            ->required(fn (string $operation) => $operation === 'create')
+                            ->required(fn(string $operation) => $operation === 'create')
                             ->maxLength(255),
                         \Filament\Forms\Components\TextInput::make('owner_email')
                             ->label('Correo Electrónico')
                             ->email()
-                            ->required(fn (string $operation) => $operation === 'create')
+                            ->required(fn(string $operation) => $operation === 'create')
                             ->maxLength(255),
                     ])
-                    ->visible(fn (string $operation) => $operation === 'create'),
+                    ->visible(fn(string $operation) => $operation === 'create'),
             ]);
     }
 

@@ -48,11 +48,11 @@ class SeasonRosterRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                \Filament\Actions\AttachAction::make()
                     ->label('Agregar Jugador')
                     ->modalHeading('Agregar Jugador al Roster')
-                    ->modalSubmitButtonLabel('Agregar')
-                    ->form(fn (Tables\Actions\AttachAction $action): array => [
+                    ->modalSubmitActionLabel('Agregar')
+                    ->form(fn(\Filament\Actions\AttachAction $action): array => [
                         $action->getRecordSelect()
                             ->label('Jugador')
                             ->options(function () {
@@ -60,7 +60,7 @@ class SeasonRosterRelationManager extends RelationManager
 
                                 return Player::where('league_id', $league?->id)
                                     ->get()
-                                    ->mapWithKeys(fn ($player) => [
+                                    ->mapWithKeys(fn($player) => [
                                         $player->id => "{$player->name} {$player->last_name}",
                                     ]);
                             })
@@ -121,15 +121,15 @@ class SeasonRosterRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
+                \Filament\Actions\EditAction::make()
                     ->modalHeading('Editar Roster')
                     ->form([
-                        Forms\Components\TextInput::make('pivot.number')
+                        Forms\Components\TextInput::make('number')
                             ->label('Número')
                             ->numeric()
                             ->minValue(0)
                             ->maxValue(99),
-                        Forms\Components\Select::make('pivot.position')
+                        Forms\Components\Select::make('position')
                             ->label('Posición')
                             ->options([
                                 'P' => 'Pitcher (P)',
@@ -146,12 +146,12 @@ class SeasonRosterRelationManager extends RelationManager
                             ])
                             ->searchable(),
                     ]),
-                Tables\Actions\DetachAction::make()
+                \Filament\Actions\DetachAction::make()
                     ->label('Quitar'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DetachBulkAction::make()
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DetachBulkAction::make()
                         ->label('Quitar seleccionados'),
                 ]),
             ]);

@@ -32,7 +32,7 @@ class PlayersTable
                     ->label('Posición')
                     ->searchable()
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'P' => 'warning',
                         'C' => 'info',
                         default => 'gray',
@@ -90,6 +90,7 @@ class PlayersTable
                     ]),
             ])
             ->recordActions([
+                \Filament\Actions\ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

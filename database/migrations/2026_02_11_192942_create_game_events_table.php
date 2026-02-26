@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('game_id')->constrained()->cascadeOnDelete();
             $table->unsignedTinyInteger('inning');
             $table->boolean('is_top_inning');
-            $table->foreignId('team_id')->constrained()->comment('Offensive Team'); // Equipo al bate
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete()->comment('Offensive Team'); // Equipo al bate
             $table->foreignId('batter_id')->constrained('players')->cascadeOnDelete();
             $table->foreignId('pitcher_id')->constrained('players')->cascadeOnDelete();
 
@@ -30,6 +30,7 @@ return new class extends Migration {
 
             // Consecuencias
             $table->unsignedTinyInteger('runs_scored')->default(0);
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
 
             $table->timestamps();
         });

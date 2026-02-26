@@ -1,0 +1,120 @@
+/* DiamondOS Admin Overhaul */
+
+.fi-sidebar {
+    background: #1A237E !important;
+    /* Navy base */
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.fi-sidebar-item-button:hover {
+    background: rgba(0, 229, 255, 0.1) !important;
+    color: #00E5FF !important;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-button {
+    background: rgba(0, 229, 255, 0.2) !important;
+    border-right: 3px solid #00E5FF !important;
+}
+
+.fi-main-ctn {
+    background-color: #0D1117 !important;
+    background-image:
+        radial-gradient(at 0% 0%, hsla(230, 100%, 15%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(15, 100%, 25%, 1) 0, transparent 50%) !important;
+}
+
+.fi-section,
+.fi-ta-ctn,
+.fi-modal-window {
+    background: rgba(13, 17, 23, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.fi-ta-header-cell {
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    font-weight: 900 !important;
+    font-style: italic !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.fi-btn-color-primary {
+    background: #00E5FF !important;
+    color: #1A237E !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.3) !important;
+}
+
+.fi-btn-color-primary:hover {
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5) !important;
+    transform: translateY(-1px);
+}
+
+/* Modal and Input Overrides for DiamondOS Form Aesthetics */
+
+.fi-modal-window {
+    background: rgba(15, 33, 35, 0.95) !important;
+    /* #0f2123 from Stitch */
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(0, 229, 255, 0.2) !important;
+    /* cyan border */
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.1) !important;
+}
+
+.fi-modal-header {
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1) !important;
+}
+
+.fi-modal-heading {
+    text-transform: uppercase !important;
+    letter-spacing: 0.2em !important;
+    font-size: 0.85rem !important;
+    color: #00E5FF !important;
+    font-weight: 800 !important;
+}
+
+/* Inputs */
+.fi-input-wrp {
+    background: rgba(26, 35, 126, 0.1) !important;
+    /* navy-accent/10 */
+    border: 1px solid rgba(0, 229, 255, 0.15) !important;
+    backdrop-filter: blur(5px);
+    border-radius: 0.75rem !important;
+    /* rounded-xl */
+    color: #fff !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.fi-input-wrp:focus-within {
+    border-color: #00E5FF !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.2) !important;
+    /* glow-border */
+    background: rgba(0, 229, 255, 0.05) !important;
+}
+
+.fi-input-wrp>input,
+.fi-input-wrp>select {
+    color: #fff !important;
+    font-weight: 500 !important;
+}
+
+/* Form Sections mimicking Stitch Cards */
+.fi-section {
+    background: rgba(255, 255, 255, 0.03) !important;
+    /* glass-card */
+    border: 1px solid rgba(0, 229, 255, 0.1) !important;
+}
+
+.fi-section-header-heading {
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    font-size: 0.75rem !important;
+    font-weight: 800 !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+}

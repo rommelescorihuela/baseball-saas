@@ -29,10 +29,13 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Pages\Auth\Login::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#00E5FF',
+                'danger' => '#FF6E40',
+                'gray' => '#1A237E',
             ])
+            ->font('Outfit')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -59,6 +62,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->renderHook(
+                'panels::head.done',
+                fn(): string => '<link rel="stylesheet" href="' . asset('css/filament-custom.css') . '">',
+            );
     }
 }

@@ -28,8 +28,11 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#00E5FF',
+                'danger' => '#FF6E40',
+                'gray' => '#1A237E',
             ])
+            ->font('Outfit')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\Filament\App\Pages')
             ->pages([
@@ -59,6 +62,10 @@ class AppPanelProvider extends PanelProvider
                 \App\Http\Middleware\CheckSubscriptionLimits::class,
             ])
             ->tenantMenu(true)
-            ->login();
+            ->renderHook(
+                'panels::head.done',
+                fn(): string => '<link rel="stylesheet" href="' . asset('css/filament-custom.css') . '">',
+            )
+            ->login(\App\Filament\Pages\Auth\Login::class);
     }
 }

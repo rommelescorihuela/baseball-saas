@@ -6,6 +6,116 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Outfit', 'Inter', sans-serif;
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    --color-primary: #06e0f9;
+    --color-accent: #FF6E40;
+    --color-background-dark: #0f2123;
+    --color-navy-deep: #1A237E;
+
+    --color-brand-teal: #06e0f9;
+    --color-brand-orange: #FF6E40;
+    --color-brand-navy: #0f2123;
+
+    --animate-glow: glow 2s ease-in-out infinite alternate;
+
+    @keyframes glow {
+        from {
+            box-shadow: 0 0 5px var(--color-primary), 0 0 10px var(--color-primary);
+        }
+
+        to {
+            box-shadow: 0 0 20px var(--color-primary), 0 0 30px var(--color-primary);
+        }
+    }
+}
+
+@layer base {
+    body {
+        @apply bg-[#0f2123] text-slate-100 antialiased;
+        font-family: var(--font-sans);
+        min-height: 100dvh;
+    }
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-gradient {
+    background: radial-gradient(circle at top right, #06e0f933, transparent),
+        radial-gradient(circle at bottom left, #FF6E4022, transparent),
+        #0f2123;
+}
+
+.text-gradient-diamond {
+    @apply bg-gradient-to-r from-[#06e0f9] to-[#FF6E40] bg-clip-text text-transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.fill-1 {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* DiamondOS Login Form Overrides */
+.fi-simple-main {
+    @apply p-0 m-0 max-w-none !bg-transparent;
+}
+
+.fi-simple-layout {
+    @apply !bg-transparent;
+}
+
+.fi-simple-header {
+    @apply hidden;
+}
+
+.fi-fo-field-wrp {
+    @apply !w-full !max-w-none;
+}
+
+.fi-fo-field-wrp-label {
+    @apply !text-slate-400 !text-[10px] !font-black !uppercase !tracking-widest !italic !mb-2 !block;
+}
+
+.fi-input-wrp {
+    @apply !bg-slate-900/50 !border-primary/20 !rounded-xl !py-1 !transition-all !w-full !flex;
+}
+
+.fi-input-wrp:focus-within {
+    @apply !border-primary !ring-1 !ring-primary/30;
+}
+
+.fi-input {
+    @apply !text-white !font-black !italic !bg-transparent !w-full !border-0 !ring-0 !outline-none;
+}
+
+.fi-fo-checkbox-label {
+    @apply !text-slate-400 !text-[10px] !font-black !uppercase !tracking-widest !italic;
+}
+
+.fi-checkbox {
+    @apply !bg-slate-900/50 !border-primary/20 !rounded;
+}
+
+.fi-form-ctn,
+.fi-form-ctn>* {
+    @apply !w-full;
+}
+
+/* Address nested gird logic for full width */
+.fi-form-ctn .grid {
+    @apply !w-full !gap-4;
 }

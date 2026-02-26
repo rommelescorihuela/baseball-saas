@@ -16,6 +16,13 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->string('logo')->nullable();
             $table->enum('status', ['active', 'past_due', 'suspended'])->default('active');
+
+
+            $table->string('plan')->default('free'); // free, pro, unlimited
+            $table->string('subscription_status')->default('active'); // active, trialing, past_due, canceled
+            $table->timestamp('trial_ends_at')->nullable();
+            $table->timestamp('subscription_ends_at')->nullable();
+
             $table->timestamps();
         });
 

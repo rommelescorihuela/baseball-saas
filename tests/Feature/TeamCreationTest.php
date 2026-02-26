@@ -21,10 +21,10 @@ class TeamCreationTest extends TestCase
 
         // Ensure roles exist
         if (!Role::where('name', 'league_owner')->exists()) {
-             Role::create(['name' => 'league_owner', 'guard_name' => 'web']);
+            Role::create(['name' => 'league_owner', 'guard_name' => 'web']);
         }
         if (!Role::where('name', 'team_owner')->exists()) {
-             Role::create(['name' => 'team_owner', 'guard_name' => 'web']);
+            Role::create(['name' => 'team_owner', 'guard_name' => 'web']);
         }
 
         // Create League
@@ -49,8 +49,9 @@ class TeamCreationTest extends TestCase
         Filament::setTenant($league);
 
         $managerEmail = 'manager' . uniqid() . '@test.com';
+        $teamName = 'Test Team ' . uniqid();
         $teamData = [
-            'name' => 'Test Team',
+            'name' => $teamName,
             'owner_name' => 'Team Manager',
             'owner_email' => $managerEmail,
         ];
@@ -62,11 +63,11 @@ class TeamCreationTest extends TestCase
 
         // Assert Team Created
         $this->assertDatabaseHas('teams', [
-            'name' => 'Test Team',
+            'name' => $teamName,
             'league_id' => $league->id,
         ]);
 
-        $team = Team::where('name', 'Test Team')->first();
+        $team = Team::where('name', $teamName)->first();
 
         // Assert User Created
         $this->assertDatabaseHas('users', [
@@ -75,7 +76,7 @@ class TeamCreationTest extends TestCase
         ]);
 
         $manager = User::where('email', $managerEmail)->first();
-        
+
         // Assert Role Assigned (scoped)
         setPermissionsTeamId($league->id); // Ensure we check in correct scope
         $this->assertTrue($manager->hasRole('team_owner'));

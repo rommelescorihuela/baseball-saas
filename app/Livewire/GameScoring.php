@@ -82,7 +82,7 @@ class GameScoring extends Component
     public function registerEvent(string $type, string $result, int $rbi = 0)
     {
         // Validation
-        if (! $this->batter_id || ! $this->pitcher_id) {
+        if (!$this->batter_id || !$this->pitcher_id) {
             // We can accept some events without this, but for now enforcing it for stats
             // In real app, use Validation
         }
@@ -133,44 +133,34 @@ class GameScoring extends Component
             // Home run: anotan todos los corredores + el bateador
             if ($result === 'hr' || $result === 'home_run') {
                 $runs = 1; // El bateador
-                if ($this->runner_on_first) {
+                if ($this->runner_on_first)
                     $runs++;
-                }
-                if ($this->runner_on_second) {
+                if ($this->runner_on_second)
                     $runs++;
-                }
-                if ($this->runner_on_third) {
+                if ($this->runner_on_third)
                     $runs++;
-                }
             }
             // Triple, double, single: puede anotar corredor de tercera
             elseif (in_array($result, ['3b', 'triple'])) {
-                if ($this->runner_on_third) {
+                if ($this->runner_on_third)
                     $runs++;
-                }
-                if ($this->runner_on_second) {
+                if ($this->runner_on_second)
                     $runs++;
-                }
-                if ($this->runner_on_first) {
+                if ($this->runner_on_first)
                     $runs++;
-                }
             } elseif (in_array($result, ['2b', 'double'])) {
-                if ($this->runner_on_third) {
+                if ($this->runner_on_third)
                     $runs++;
-                }
-                if ($this->runner_on_second) {
+                if ($this->runner_on_second)
                     $runs++;
-                }
-            } elseif (in_array($result, ['1b', 'single', 'hit'])) {
-                if ($this->runner_on_third) {
+            } elseif (in_array($result, ['1b', 'single', 'hit', 'error', 'fielders_choice'])) {
+                if ($this->runner_on_third)
                     $runs++;
-                }
             }
             // Sacrifice fly: anota corredor de tercera
             elseif ($result === 'sacrifice_fly') {
-                if ($this->runner_on_third) {
+                if ($this->runner_on_third)
                     $runs++;
-                }
             }
         }
 
@@ -201,8 +191,8 @@ class GameScoring extends Component
                 $this->runner_on_second = $this->batter_id;
                 $this->runner_on_first = null;
             }
-            // Single: bateador a primera, corredores avanzan
-            elseif (in_array($result, ['1b', 'single', 'hit'])) {
+            // Single, Error, Fielder's Choice: bateador a primera, corredores avanzan
+            elseif (in_array($result, ['1b', 'single', 'hit', 'error', 'fielders_choice'])) {
                 $this->runner_on_third = $this->runner_on_second;
                 $this->runner_on_second = $this->runner_on_first;
                 $this->runner_on_first = $this->batter_id;
@@ -217,13 +207,15 @@ class GameScoring extends Component
                             $this->runner_on_third = $this->runner_on_second;
                         }
                         $this->runner_on_second = $this->runner_on_first;
+                    } else {
+                        $this->runner_on_second = $this->runner_on_first;
                     }
                 }
                 $this->runner_on_first = $this->batter_id;
             }
             // Out: el bateador no llega a base
             elseif (in_array($result, ['out', 'strikeout', 'strikeout_looking', 'strikeout_swinging'])) {
-                // Los corredores mantienen su posición (a menos que sea fielder's choice)
+                // Los corredores mantienen su posición (a menos que sea fielder's choice, ya manejado arriba)
             }
             // Sacrifice fly: out pero corredor avanza
             elseif ($result === 'sacrifice_fly') {

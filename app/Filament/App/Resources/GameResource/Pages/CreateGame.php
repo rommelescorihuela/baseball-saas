@@ -8,4 +8,14 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateGame extends CreateRecord
 {
     protected static string $resource = GameResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $tenant = \Filament\Facades\Filament::getTenant();
+        if ($tenant) {
+            $data['league_id'] = $tenant->id;
+        }
+
+        return $data;
+    }
 }

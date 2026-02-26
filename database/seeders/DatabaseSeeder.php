@@ -41,7 +41,8 @@ class DatabaseSeeder extends Seeder
             'team_owner', // Dueño de Equipo
             'secretary', // Administrativo
             'coach', // Técnico
-            'player' // Jugador
+            'player', // Jugador
+            'scorer' // Anotador Oficial
         ];
 
         foreach ($roles as $role) {
