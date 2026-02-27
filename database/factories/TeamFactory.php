@@ -16,9 +16,12 @@ class TeamFactory extends Factory
      */
     public function definition(): array
     {
+        $name = 'Team ' . rand(1000, 9999);
         return [
-            'name' => 'Team ' . rand(1000, 9999),
+            'name' => $name,
+            'slug' => \Illuminate\Support\Str::slug($name) . '-' . uniqid(),
             'logo' => null,
+            'city' => $this->faker->city,
             'league_id' => \App\Models\League::factory(),
         ];
     }

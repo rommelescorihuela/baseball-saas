@@ -67,6 +67,11 @@ class Game extends Model
         return $this->hasMany(PlayerGameStat::class);
     }
 
+    public function playerGameStats()
+    {
+        return $this->hasMany(PlayerGameStat::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Accessors & Helpers

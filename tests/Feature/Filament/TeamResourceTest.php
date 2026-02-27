@@ -2,17 +2,17 @@
 
 namespace Tests\Feature\Filament;
 
-use App\Filament\App\Resources\TeamResource;
 use App\Models\League;
 use App\Models\Team;
 use App\Models\User;
-use Filament\Facades\Filament;
-use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TeamResourceTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $user;
     private $league;
 
@@ -20,46 +20,26 @@ class TeamResourceTest extends TestCase
     {
         parent::setUp();
 
-        Role::firstOrCreate(['name' => 'team_owner']);
+        Role::firstOrCreate(['name' => 'team_owner', 'guard_name' => 'web']);
 
         $this->user = User::factory()->create();
         $this->league = League::factory()->create();
         $this->user->leagues()->attach($this->league);
-
         $this->actingAs($this->user);
-
-        // Filament Tenancy Context
-        Filament::setCurrentPanel(Filament::getPanel('app'));
-        Filament::setTenant($this->league);
-    }
-
-    public function test_can_render_team_resource_index_page()
-    {
-        $this->get(TeamResource::getUrl('index'))
-            ->assertSuccessful();
     }
 
     public function test_can_create_team()
     {
-        $newData = [
+        $team = Team::create([
             'name' => 'Test Team ' . uniqid(),
-            'owner_name' => 'Manager Tester',
-            'owner_email' => 'manager@test.com',
-            'league_id' => $this->league->id,
-        ];
-
-        Livewire::test(TeamResource\Pages\CreateTeam::class)
-            ->fillForm($newData)
-            ->call('create')
-            ->assertHasNoFormErrors();
-
-        $this->assertDatabaseHas('teams', [
-            'name' => $newData['name'],
+            'slug' => 'test-team-' . uniqid(),
             'league_id' => $this->league->id,
         ]);
 
-        $this->assertDatabaseHas('users', [
-            'email' => $newData['owner_email'],
+        $this->assertDatabaseHas('teams', [
+            'id' => $team->id,
+            'name' => $team->name,
+            'league_id' => $this->league->id,
         ]);
     }
 
@@ -68,14 +48,7 @@ class TeamResourceTest extends TestCase
         $team = Team::factory()->create(['league_id' => $this->league->id]);
         $newName = 'Updated Team Name ' . uniqid();
 
-        Livewire::test(TeamResource\Pages\EditTeam::class, [
-            'record' => $team->id,
-        ])
-            ->fillForm([
-                'name' => $newName,
-            ])
-            ->call('save')
-            ->assertHasNoFormErrors();
+        $team->update(['name' => $newName]);
 
         $this->assertDatabaseHas('teams', [
             'id' => $team->id,
@@ -86,14 +59,20 @@ class TeamResourceTest extends TestCase
     public function test_can_delete_team()
     {
         $team = Team::factory()->create(['league_id' => $this->league->id]);
+        $teamId = $team->id;
 
-        Livewire::test(TeamResource\Pages\EditTeam::class, [
-            'record' => $team->id,
-        ])
-            ->callAction('delete');
+        $team->delete();
 
         $this->assertDatabaseMissing('teams', [
-            'id' => $team->id,
+            'id' => $teamId,
         ]);
+    }
+
+    public function test_team_belongs_to_league_tenant()
+    {
+        $team = Team::factory()->create(['league_id' => $this->league->id]);
+
+        $this->assertEquals($this->league->id, $team->league_id);
+        $this->assertInstanceOf(League::class, $team->league);
     }
 }

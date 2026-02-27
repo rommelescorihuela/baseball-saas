@@ -129,42 +129,66 @@ describe('League canCreateTeam Method', function () {
 
     test('returns true for free plan when under limit', function () {
         $league = League::factory()->create(['plan' => Plan::FREE]);
-        Team::factory()->count(5)->create(['league_id' => $league->id]);
+        $category = Category::factory()->create(['league_id' => $league->id]);
+        $teams = Team::factory()->count(5)->create(['league_id' => $league->id]);
+        foreach ($teams as $team) {
+            $team->categories()->attach($category->id, ['status' => 'approved']);
+        }
 
         expect($league->canCreateTeam())->toBeTrue();
     });
 
     test('returns false for free plan when at limit', function () {
         $league = League::factory()->create(['plan' => Plan::FREE]);
-        Team::factory()->count(8)->create(['league_id' => $league->id]);
+        $category = Category::factory()->create(['league_id' => $league->id]);
+        $teams = Team::factory()->count(8)->create(['league_id' => $league->id]);
+        foreach ($teams as $team) {
+            $team->categories()->attach($category->id, ['status' => 'approved']);
+        }
 
         expect($league->canCreateTeam())->toBeFalse();
     });
 
     test('returns false for free plan when over limit', function () {
         $league = League::factory()->create(['plan' => Plan::FREE]);
-        Team::factory()->count(10)->create(['league_id' => $league->id]);
+        $category = Category::factory()->create(['league_id' => $league->id]);
+        $teams = Team::factory()->count(10)->create(['league_id' => $league->id]);
+        foreach ($teams as $team) {
+            $team->categories()->attach($category->id, ['status' => 'approved']);
+        }
 
         expect($league->canCreateTeam())->toBeFalse();
     });
 
     test('returns true for pro plan when under limit', function () {
         $league = League::factory()->create(['plan' => Plan::PRO]);
-        Team::factory()->count(15)->create(['league_id' => $league->id]);
+        $category = Category::factory()->create(['league_id' => $league->id]);
+        $teams = Team::factory()->count(15)->create(['league_id' => $league->id]);
+        foreach ($teams as $team) {
+            $team->categories()->attach($category->id, ['status' => 'approved']);
+        }
 
         expect($league->canCreateTeam())->toBeTrue();
     });
 
     test('returns false for pro plan when at limit', function () {
         $league = League::factory()->create(['plan' => Plan::PRO]);
-        Team::factory()->count(20)->create(['league_id' => $league->id]);
+        $category = Category::factory()->create(['league_id' => $league->id]);
+        $teams = Team::factory()->count(20)->create(['league_id' => $league->id]);
+        foreach ($teams as $team) {
+            $team->categories()->attach($category->id, ['status' => 'approved']);
+        }
 
         expect($league->canCreateTeam())->toBeFalse();
     });
 
     test('returns true for unlimited plan regardless of team count', function () {
         $league = League::factory()->create(['plan' => Plan::UNLIMITED]);
-        Team::factory()->count(50)->create(['league_id' => $league->id]);
+        $category = Category::factory()->create(['league_id' => $league->id]);
+        $teams = Team::factory()->count(50)->create(['league_id' => $league->id]);
+        foreach ($teams as $team) {
+            $team->categories()->attach($category->id, ['status' => 'approved']);
+        }
 
         expect($league->canCreateTeam())->toBeTrue();
     });

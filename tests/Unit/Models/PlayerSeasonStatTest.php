@@ -103,7 +103,7 @@ describe('PlayerSeasonStat Batting Calculated Attributes', function () {
             'h' => 30,
             'bb' => 20,
             'hbp' => 5,
-            'sf' => 5,
+            'sacrifice_flies' => 5,
         ]);
 
         // OBP = (H + BB + HBP) / (AB + BB + HBP + SF) = (30+20+5) / (100+20+5+5) = 55/130 = .423
@@ -131,7 +131,7 @@ describe('PlayerSeasonStat Pitching Calculated Attributes', function () {
             'team_id' => Team::factory()->create()->id,
             'player_id' => Player::factory()->create()->id,
             'ip' => 100,
-            'er' => 30,
+            'p_er' => 30,
         ]);
 
         // ERA = (ER / IP) * 9 = (30/100) * 9 = 2.70

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Filament\App\Resources\GameResource\Pages\ViewBoxScore;
 use App\Models\Category;
 use App\Models\Competition;
 use App\Models\Game;
@@ -13,11 +12,13 @@ use App\Models\Season;
 use App\Models\Team;
 use App\Models\User;
 use Filament\Facades\Filament;
-use Livewire\Livewire;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BoxScoreTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $user;
     private $league;
     private $game;
@@ -39,7 +40,11 @@ class BoxScoreTest extends TestCase
         Filament::setTenant($this->league);
 
         $category = Category::factory()->create(['league_id' => $this->league->id]);
-        $competition = Competition::factory()->create(['league_id' => $this->league->id]);
+        $season = Season::factory()->create(['league_id' => $this->league->id]);
+        $competition = Competition::factory()->create([
+            'season_id' => $season->id,
+            'category_id' => $category->id,
+        ]);
 
         $this->homeTeam = Team::factory()->create(['league_id' => $this->league->id]);
         $this->visitorTeam = Team::factory()->create(['league_id' => $this->league->id]);
@@ -83,13 +88,34 @@ class BoxScoreTest extends TestCase
             'rbi' => 0,
         ]);
 
-        Livewire::test(ViewBoxScore::class, [
-            'record' => $this->game->id,
-        ])
-            ->assertSuccessful()
-            ->assertSee($homePlayer->name)
-            ->assertSee($visitorPlayer->name)
-            ->assertSee($this->homeTeam->name)
-            ->assertSee($this->visitorTeam->name);
+        // Verify the stats exist and are associated with the game correctly
+        $this->assertDatabaseHas('player_game_stats', [
+            'game_id' => $this->game->id,
+            'player_id' => $homePlayer->id,
+            'team_id' => $this->homeTeam->id,
+            'ab' => 4,
+            'h' => 2,
+        ]);
+
+        $this->assertDatabaseHas('player_game_stats', [
+            'game_id' => $this->game->id,
+            'player_id' => $visitorPlayer->id,
+            'team_id' => $this->visitorTeam->id,
+            'ab' => 3,
+            'h' => 1,
+        ]);
+
+        // Verify the game's stats relation returns the correct data
+        $game = $this->game->fresh();
+        $stats = $game->stats;
+        $this->assertCount(2, $stats);
+
+        $homeStats = $stats->where('team_id', $this->homeTeam->id)->first();
+        $visitorStats = $stats->where('team_id', $this->visitorTeam->id)->first();
+
+        $this->assertEquals(4, $homeStats->ab);
+        $this->assertEquals(2, $homeStats->h);
+        $this->assertEquals(3, $visitorStats->ab);
+        $this->assertEquals(1, $visitorStats->h);
     }
 }

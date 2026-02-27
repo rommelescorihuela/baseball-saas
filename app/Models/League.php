@@ -28,27 +28,35 @@ class League extends Model
             return true;
         }
 
-        // Canceled is immediate block
-        if ($this->subscription_status === 'canceled') {
-            return false;
-        }
-
         // Active or Trialing is immediate access
         if ($this->subscription_status === 'active' || $this->subscription_status === 'trialing') {
             return true;
         }
 
-        // If past_due, it only works if the expiration date is still in the future (grace period)
+        // If canceled or past_due, it only works if the expiration date is still in the future
         return $this->subscription_ends_at && $this->subscription_ends_at->isFuture();
     }
 
-    public function canCreateTeam(): bool
+    public function approvedTeamsCount(): int
+    {
+        return \App\Models\Team::whereHas('categories', function ($query) {
+            $query->where('league_id', $this->id)
+                ->where('category_team.status', 'approved');
+        })->count();
+    }
+
+    public function canApproveTeam(): bool
     {
         $limit = $this->plan->maxTeams();
         if ($limit === null)
             return true;
 
-        return $this->teams()->count() < $limit;
+        return $this->approvedTeamsCount() < $limit;
+    }
+
+    public function canCreateTeam(): bool
+    {
+        return $this->canApproveTeam();
     }
 
     public function canCreateCompetition(): bool
@@ -62,6 +70,15 @@ class League extends Model
         return \App\Models\Competition::whereHas('category', function ($q) {
             $q->where('league_id', $this->id);
         })->count() < $limit;
+    }
+
+    public function canCreateCategory(): bool
+    {
+        $limit = $this->plan->maxCategories();
+        if ($limit === null)
+            return true;
+
+        return \App\Models\Category::where('league_id', $this->id)->count() < $limit;
     }
 
     public function users()

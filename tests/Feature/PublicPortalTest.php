@@ -25,13 +25,13 @@ test('public pages are accessible and show correct data', function () {
     $this->get('/')->assertStatus(200)
         ->assertSee('Demo League');
 
-    // Check Competition
-    $this->get(route('public.competition.show', $competition->id))
+    // Check Competition — name is in the <title> tag
+    $this->get(route('public.competition.show', $competition))
         ->assertStatus(200)
         ->assertSee('Summer Cup');
 
     // Check Team
-    $this->get(route('public.team.show', $team->id))
+    $this->get(route('public.team.show', $team))
         ->assertStatus(200)
         ->assertSee('Blue Jays');
 });

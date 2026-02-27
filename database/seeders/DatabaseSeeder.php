@@ -10,12 +10,13 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\Player;
 use App\Models\PlayerGameStat;
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 use App\Models\Game;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -64,17 +65,47 @@ class DatabaseSeeder extends Seeder
 
         foreach ($leagues as $league) {
             // League Owner
-            $owner = User::factory()->create([
-                'name' => 'Owner ' . $league->name,
-                'email' => 'owner@' . $league->slug . '.com',
+            $leagueOwner = User::factory()->create([
+                'name' => 'League Owner ' . $league->name,
+                'email' => 'league-owner@' . $league->slug . '.com',
                 'password' => Hash::make('password'),
             ]);
-            $league->users()->attach($owner);
+            $league->users()->attach($leagueOwner);
 
             // Teams
-            $teams = Team::factory()->count($teamsPerLeague)->create([
-                'league_id' => $league->id,
-            ]);
+            for ($i = 1; $i <= $teamsPerLeague; $i++) {
+                $teamName = $league->name . ' Team ' . $i;
+                $team = Team::create([
+                    'league_id' => $league->id,
+                    'name' => $teamName,
+                    'slug' => Str::slug($teamName . '-' . uniqid()),
+                    'logo' => null,
+                ]);
+
+                // Create Academy Owner for this team
+                $teamOwner = User::factory()->create([
+                    'name' => 'Academy Owner ' . $team->name,
+                    'email' => 'team-owner@' . $team->slug . '.com',
+                    'password' => Hash::make('password'),
+                ]);
+                $team->users()->attach($teamOwner);
+                $teamOwner->assignRole('team_owner');
+
+                // Players for this team
+                for ($p = 1; $p <= $playersPerTeam; $p++) {
+                    Player::create([
+                        'team_id' => $team->id,
+                        'league_id' => $league->id,
+                        'name' => 'Player ' . $p,
+                        'last_name' => $team->name,
+                        'number' => rand(1, 99),
+                        'position' => ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF'][rand(0, 8)],
+                    ]);
+                }
+            }
+
+            // Reference teams for categories
+            $teams = $league->teams;
 
             // Categories
             $categories = Category::factory()->count($categoriesPerLeague)->create([
@@ -88,15 +119,8 @@ class DatabaseSeeder extends Seeder
             foreach ($categories as $index => $category) {
                 $teamsInCat = $chunks->get($index);
                 if ($teamsInCat) {
-                    $category->teams()->attach($teamsInCat);
+                    $category->teams()->attach($teamsInCat->pluck('id')->toArray(), ['status' => 'approved']);
                 }
-            }
-
-            // Players
-            foreach ($teams as $team) {
-                Player::factory()->count($playersPerTeam)->create([
-                    'team_id' => $team->id,
-                ]);
             }
 
             // Seasons

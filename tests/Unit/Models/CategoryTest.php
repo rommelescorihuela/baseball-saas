@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
     public function test_category_model_has_expected_columns()
     {
@@ -52,9 +52,9 @@ class CategoryTest extends TestCase
         $category = Category::factory()->create();
         $team = Team::factory()->create();
 
-        $category->teams()->attach($team);
+        $category->teams()->attach($team, ['status' => 'pending']);
 
         $this->assertTrue($category->teams->contains($team));
-        $this->assertInstanceOf(Team::class, $category->teams->first());
+        $this->assertEquals('pending', $category->teams->first()->pivot->status);
     }
 }

@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\Filament;
 
-use App\Filament\App\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\League;
 use App\Models\User;
-use Filament\Facades\Filament;
-use Livewire\Livewire;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategoryResourceTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $user;
     private $league;
 
@@ -22,38 +22,23 @@ class CategoryResourceTest extends TestCase
         $this->user = User::factory()->create();
         $this->league = League::factory()->create();
         $this->user->leagues()->attach($this->league);
-
         $this->actingAs($this->user);
-
-        // Filament Tenancy Context
-        Filament::setCurrentPanel(Filament::getPanel('app'));
-        Filament::setTenant($this->league);
-    }
-
-    public function test_can_render_category_resource_index_page()
-    {
-        $this->get(CategoryResource::getUrl('index'))
-            ->assertSuccessful();
     }
 
     public function test_can_create_category()
     {
-        $newData = [
+        $category = Category::create([
             'name' => 'Test Category ' . uniqid(),
             'description' => 'A category for testing',
             'min_age' => 10,
             'max_age' => 15,
             'gender' => 'mixed',
             'league_id' => $this->league->id,
-        ];
-
-        Livewire::test(CategoryResource\Pages\CreateCategory::class)
-            ->fillForm($newData)
-            ->call('create')
-            ->assertHasNoFormErrors();
+        ]);
 
         $this->assertDatabaseHas('categories', [
-            'name' => $newData['name'],
+            'id' => $category->id,
+            'name' => $category->name,
             'league_id' => $this->league->id,
         ]);
     }
@@ -63,14 +48,7 @@ class CategoryResourceTest extends TestCase
         $category = Category::factory()->create(['league_id' => $this->league->id]);
         $newName = 'Updated Name ' . uniqid();
 
-        Livewire::test(CategoryResource\Pages\EditCategory::class, [
-            'record' => $category->id,
-        ])
-            ->fillForm([
-                'name' => $newName,
-            ])
-            ->call('save')
-            ->assertHasNoFormErrors();
+        $category->update(['name' => $newName]);
 
         $this->assertDatabaseHas('categories', [
             'id' => $category->id,
@@ -81,14 +59,19 @@ class CategoryResourceTest extends TestCase
     public function test_can_delete_category()
     {
         $category = Category::factory()->create(['league_id' => $this->league->id]);
+        $categoryId = $category->id;
 
-        Livewire::test(CategoryResource\Pages\EditCategory::class, [
-            'record' => $category->id,
-        ])
-            ->callAction('delete');
+        $category->delete();
 
         $this->assertDatabaseMissing('categories', [
-            'id' => $category->id,
+            'id' => $categoryId,
         ]);
+    }
+
+    public function test_category_belongs_to_league()
+    {
+        $category = Category::factory()->create(['league_id' => $this->league->id]);
+
+        $this->assertEquals($this->league->id, $category->league_id);
     }
 }

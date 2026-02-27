@@ -63,7 +63,7 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\App\Resources\CategoryResource\RelationManagers\TeamsRelationManager::class,
         ];
     }
 

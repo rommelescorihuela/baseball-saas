@@ -306,7 +306,7 @@ describe('GameEventObserver Batter Stats', function () {
 
         expect($stats->ab)->toBe(1)
             ->and($stats->h)->toBe(1)
-            ->and($stats->{'1b'})->toBe(1);
+            ->and($stats->singles)->toBe(1);
     });
 
     test('records home run correctly', function () {
@@ -558,7 +558,7 @@ describe('GameEventObserver Pitcher Stats', function () {
         expect($stats->p_h)->toBe(1)
             ->and($stats->p_hr)->toBe(1)
             ->and($stats->p_r)->toBe(1)
-            ->and($stats->er)->toBe(1);
+            ->and($stats->p_er)->toBe(1);
     });
 
     test('records runs allowed by pitcher', function () {
@@ -594,6 +594,6 @@ describe('GameEventObserver Pitcher Stats', function () {
             ->first();
 
         expect($stats->p_r)->toBe(2)
-            ->and($stats->er)->toBe(2);
+            ->and($stats->p_er)->toBe(2);
     });
 });

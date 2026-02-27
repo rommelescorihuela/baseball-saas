@@ -6,7 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Baseball SaaS') }} - DiamondOS</title>
+    <title>{{ $seoTitle ?? ($title ?? config('app.name', 'Baseball SaaS')) }} - DiamondOS</title>
+
+    <!-- SEO & OpenGraph Meta Tags -->
+    <meta name="description"
+        content="{{ $seoDescription ?? 'La plataforma profesional de estadísticas y seguimiento en vivo para Béisbol.' }}">
+    <meta property="og:title" content="{{ $seoTitle ?? 'DiamondOS Analytics' }}">
+    <meta property="og:description"
+        content="{{ $seoDescription ?? 'Plataforma oficial de seguimiento de Béisbol Profesional.' }}">
+    <meta property="og:image" content="{{ $seoImage ?? asset('img/diamond-os-banner.jpg') }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,7 +92,7 @@
                     </button>
                 </div>
                 <a class="flex flex-col items-center gap-1 text-slate-500 hover:text-primary transition-colors"
-                    href="#">
+                    href="#competitions-section">
                     <span class="material-symbols-outlined">emoji_events</span>
                     <span class="text-[8px] font-black uppercase tracking-widest">Leagues</span>
                 </a>

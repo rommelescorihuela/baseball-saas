@@ -61,6 +61,9 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function getTenants(Panel $panel): Collection
     {
+        if ($panel->getId() === 'academy') {
+            return $this->teams;
+        }
         return $this->leagues;
     }
 
@@ -70,7 +73,15 @@ class User extends Authenticatable implements FilamentUser, HasTenants
             return true;
         }
 
-        return $this->leagues()->whereKey($tenant->getKey())->exists();
+        if ($tenant instanceof League) {
+            return $this->leagues()->whereKey($tenant->getKey())->exists();
+        }
+
+        if ($tenant instanceof Team) {
+            return $this->teams()->whereKey($tenant->getKey())->exists();
+        }
+
+        return false;
     }
 
     public function leagues(): BelongsToMany
@@ -81,5 +92,20 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'team_user');
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function currentSubscription()
+    {
+        return $this->hasOne(Subscription::class)->where('status', 'active')->latest('expires_at');
     }
 }

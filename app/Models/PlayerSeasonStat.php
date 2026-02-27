@@ -57,7 +57,7 @@ class PlayerSeasonStat extends Model
     public function getObpAttribute(): string
     {
         $numerator = $this->h + $this->bb + $this->hbp;
-        $denominator = $this->ab + $this->bb + $this->hbp + $this->sf;
+        $denominator = $this->ab + $this->bb + $this->hbp + $this->sacrifice_flies;
 
         if ($denominator == 0) {
             return '.000';
@@ -111,7 +111,7 @@ class PlayerSeasonStat extends Model
             return '0.00';
         }
 
-        return number_format(($this->er / $this->ip) * 9, 2, '.', '');
+        return number_format(($this->p_er / $this->ip) * 9, 2, '.', '');
     }
 
     /**

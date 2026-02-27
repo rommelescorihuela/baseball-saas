@@ -13,8 +13,11 @@ class CompetitionController extends Controller
     {
         $competition->load(['teams', 'season']);
 
-        $calculator = new \App\Services\StandingsCalculator($competition);
-        $standings = $calculator->calculate();
+        // Caché crítico de 5 min para evitar que cientos de fans tiren la DB al pedir Standings
+        $standings = \Illuminate\Support\Facades\Cache::remember('competition_standings_' . $competition->id, 300, function () use ($competition) {
+            $calculator = new \App\Services\StandingsCalculator($competition);
+            return $calculator->calculate();
+        });
 
         // Attach Team models to standings for display
         $teams = $competition->teams->keyBy('id');
@@ -24,7 +27,9 @@ class CompetitionController extends Controller
             return $standing;
         });
 
-        return view('public.competition.show', compact('competition', 'standings'));
+        $seoTitle = 'Posiciones Oficiales: ' . $competition->name;
+        $seoDescription = 'Sitio oficial de standings y analíticas en vivo para ' . $competition->name . ' - ' . $competition->season->name;
+        return view('public.competition.show', compact('competition', 'standings', 'seoTitle', 'seoDescription'));
     }
 
     public function calendar(Competition $competition)
@@ -36,6 +41,7 @@ class CompetitionController extends Controller
             ->orderBy('start_time', 'asc')
             ->paginate(20);
 
-        return view('public.competition.calendar', compact('competition', 'games'));
+        $seoTitle = 'Calendario Oficial: ' . $competition->name;
+        return view('public.competition.calendar', compact('competition', 'games', 'seoTitle'));
     }
 }

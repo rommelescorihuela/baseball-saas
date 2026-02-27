@@ -20,6 +20,8 @@ class HomeController extends Controller
             ->with(['homeTeam', 'visitorTeam', 'category'])
             ->get();
 
-        return view('public.home', compact('competitions', 'upcomingGames'));
+        $seoTitle = 'Inicio';
+        $seoDescription = 'Sistema de analíticas de alto rendimiento para ligas y circuitos de béisbol.';
+        return view('public.home', compact('competitions', 'upcomingGames', 'seoTitle', 'seoDescription'));
     }
 }

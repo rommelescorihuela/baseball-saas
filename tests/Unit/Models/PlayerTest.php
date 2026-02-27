@@ -45,6 +45,11 @@ describe('Player Model', function () {
         expect($player->league)->toBeInstanceOf(League::class);
     });
 
+    test('can exist without a league (academy-centric)', function () {
+        $player = Player::factory()->create(['league_id' => null]);
+        expect($player->league_id)->toBeNull();
+    });
+
     test('belongs to a team', function () {
         $player = Player::factory()->create();
 

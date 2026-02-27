@@ -26,6 +26,15 @@ enum Plan: string
         };
     }
 
+    public function maxCategories(): ?int
+    {
+        return match ($this) {
+            self::FREE => 1,
+            self::PRO => 5,
+            self::UNLIMITED => null,
+        };
+    }
+
     public function label(): string
     {
         return match ($this) {

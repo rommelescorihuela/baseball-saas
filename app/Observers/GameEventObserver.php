@@ -82,12 +82,12 @@ class GameEventObserver
                     break;
 
                 case 'sacrifice_fly':
-                    $stats->sac++;
+                    $stats->sacrifice_flies++;
                     // No cuenta como At Bat
                     break;
 
                 case 'sacrifice_hit':
-                    $stats->sf++;
+                    $stats->sh++;
                     // No cuenta como At Bat
                     break;
 
@@ -95,21 +95,21 @@ class GameEventObserver
                 case 'single':
                     $stats->h++;
                     $stats->ab++;
-                    $stats->{'1b'}++;
+                    $stats->singles++;
                     break;
 
                 case '2b':
                 case 'double':
                     $stats->h++;
                     $stats->ab++;
-                    $stats->{'2b'}++;
+                    $stats->doubles++;
                     break;
 
                 case '3b':
                 case 'triple':
                     $stats->h++;
                     $stats->ab++;
-                    $stats->{'3b'}++;
+                    $stats->triples++;
                     break;
 
                 case 'hr':
@@ -124,7 +124,7 @@ class GameEventObserver
                     // Hit genérico, contar como single
                     $stats->h++;
                     $stats->ab++;
-                    $stats->{'1b'}++;
+                    $stats->singles++;
                     break;
             }
 
@@ -194,12 +194,12 @@ class GameEventObserver
                     break;
 
                 case 'sacrifice_fly':
-                    $stats->sac++;
+                    $stats->sh++;
                     $this->recordOut($stats, $gameEvent);
                     break;
 
                 case 'sacrifice_hit':
-                    $stats->sf++;
+                    $stats->sacrifice_flies++;
                     $this->recordOut($stats, $gameEvent);
                     break;
             }
@@ -209,7 +209,7 @@ class GameEventObserver
                 $stats->p_r += $gameEvent->runs_scored;
                 // TODO: Determinar si es carrera limpia (earned run)
                 // Por ahora asumimos que todas son limpias
-                $stats->er += $gameEvent->runs_scored;
+                $stats->p_er += $gameEvent->runs_scored;
             }
         }
 

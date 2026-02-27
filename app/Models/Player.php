@@ -43,6 +43,11 @@ class Player extends Model
             ->withTimestamps();
     }
 
+    public function competitions()
+    {
+        return $this->belongsToMany(Competition::class, 'team_player_season', 'player_id', 'season_id', 'id', 'season_id');
+    }
+
     public function stats()
     {
         return $this->hasMany(PlayerSeasonStat::class);

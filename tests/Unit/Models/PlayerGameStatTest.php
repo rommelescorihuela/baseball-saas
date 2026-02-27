@@ -102,7 +102,7 @@ describe('PlayerGameStat Batting Calculated Attributes', function () {
             'h' => 3,
             'bb' => 2,
             'hbp' => 1,
-            'sf' => 1,
+            'sacrifice_flies' => 1,
         ]);
 
         // OBP = (H + BB + HBP) / (AB + BB + HBP + SF) = (3+2+1) / (10+2+1+1) = 6/14 = .429
@@ -118,7 +118,7 @@ describe('PlayerGameStat Batting Calculated Attributes', function () {
             'h' => 0,
             'bb' => 0,
             'hbp' => 0,
-            'sf' => 0,
+            'sacrifice_flies' => 0,
         ]);
 
         expect($stats->obp)->toBe('.000');
@@ -145,7 +145,7 @@ describe('PlayerGameStat Pitching Calculated Attributes', function () {
             'team_id' => Team::factory()->create()->id,
             'player_id' => Player::factory()->create()->id,
             'ip' => 9,
-            'er' => 3,
+            'p_er' => 3,
         ]);
 
         // ERA = (ER / IP) * 9 = (3/9) * 9 = 3.00
@@ -158,7 +158,7 @@ describe('PlayerGameStat Pitching Calculated Attributes', function () {
             'team_id' => Team::factory()->create()->id,
             'player_id' => Player::factory()->create()->id,
             'ip' => 0,
-            'er' => 0,
+            'p_er' => 0,
         ]);
 
         expect($stats->era)->toBe('0.00');

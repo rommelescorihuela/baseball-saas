@@ -68,7 +68,7 @@ class PlayerGameStatsRelationManager extends RelationManager
                                             TextInput::make('bb')->numeric()->default(0)->label('BB'),
                                             TextInput::make('so')->numeric()->default(0)->label('SO'),
                                             TextInput::make('hbp')->numeric()->default(0)->label('GP'),
-                                            TextInput::make('sf')->numeric()->default(0)->label('SF'),
+                                            TextInput::make('sacrifice_flies')->numeric()->default(0)->label('SF'),
                                             TextInput::make('sh')->numeric()->default(0)->label('SH'),
                                         ]),
                                     ])->compact()->collapsible(),

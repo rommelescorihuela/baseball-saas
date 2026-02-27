@@ -72,6 +72,18 @@ class UserTest extends TestCase
         $this->assertTrue($tenants->contains($league));
     }
 
+    public function test_get_tenants_returns_teams_for_academy_panel()
+    {
+        $user = User::factory()->create();
+        $team = Team::factory()->create();
+
+        $user->teams()->attach($team);
+
+        $tenants = $user->getTenants(\Filament\Facades\Filament::getPanel('academy'));
+
+        $this->assertTrue($tenants->contains($team));
+    }
+
     public function test_can_access_tenant_returns_true_if_user_belongs_to_league()
     {
         $user = User::factory()->create();

@@ -41,6 +41,9 @@ class TeamResource extends Resource
                             ->maxLength(255),
                         \Filament\Forms\Components\FileUpload::make('logo')
                             ->image()
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(2048)
+                            ->disk('public')
                             ->directory('teams/logos'),
                     ]),
                 \Filament\Schemas\Components\Section::make('Encargado del Equipo (Manager)')

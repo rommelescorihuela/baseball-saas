@@ -20,9 +20,9 @@ return new class extends Migration {
             $table->unsignedInteger('ao')->default(0)->comment('At Outs'); // Outs made
             $table->unsignedInteger('ab')->default(0)->comment('At Bats');
             $table->unsignedInteger('h')->default(0)->comment('Hits');
-            $table->unsignedInteger('1b')->default(0)->comment('Singles');
-            $table->unsignedInteger('2b')->default(0)->comment('Doubles');
-            $table->unsignedInteger('3b')->default(0)->comment('Triples');
+            $table->unsignedInteger('singles')->default(0)->comment('Singles');
+            $table->unsignedInteger('doubles')->default(0)->comment('Doubles');
+            $table->unsignedInteger('triples')->default(0)->comment('Triples');
             $table->unsignedInteger('hr')->default(0)->comment('Home Runs');
             $table->unsignedInteger('r')->default(0)->comment('Runs');
             $table->unsignedInteger('rbi')->default(0)->comment('Runs Batted In');
@@ -31,12 +31,12 @@ return new class extends Migration {
             $table->unsignedInteger('hbp')->default(0)->comment('Hit by Pitch');
             $table->unsignedInteger('sb')->default(0)->comment('Stolen Bases');
             $table->unsignedInteger('cs')->default(0)->comment('Caught Stealing');
-            $table->unsignedInteger('sac')->default(0)->comment('Sacrifice Flies');
-            $table->unsignedInteger('sf')->default(0)->comment('Sacrifice Hits');
+            $table->unsignedInteger('sh')->default(0)->comment('Sacrifice Hits');
+            $table->unsignedInteger('sacrifice_flies')->default(0)->comment('Sacrifice Flies');
 
             // Pitching Stats
             $table->decimal('ip', 4, 1)->default(0); // Innings Pitched
-            $table->unsignedInteger('er')->default(0); // Earned Runs
+            $table->unsignedInteger('p_er')->default(0); // Earned Runs
             $table->unsignedInteger('p_h')->default(0)->comment('Hits Allowed');
             $table->unsignedInteger('p_r')->default(0)->comment('Runs Allowed');
             $table->unsignedInteger('p_bb')->default(0)->comment('Walks Allowed');

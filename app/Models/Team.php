@@ -9,7 +9,12 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'logo', 'league_id'];
+    protected $fillable = ['name', 'slug', 'logo', 'league_id'];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function league()
     {

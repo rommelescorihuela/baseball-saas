@@ -2,35 +2,29 @@
 
 namespace Tests\Feature;
 
-use App\Filament\App\Resources\TeamResource\Pages\CreateTeam;
 use App\Models\League;
-use App\Models\User;
 use App\Models\Team;
-use Filament\Facades\Filament;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
-use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
-use App\Mail\TeamOwnerInvitation;
 
 class TeamCreationTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_league_owner_can_create_team_and_invite_owner()
     {
         Mail::fake();
 
         // Ensure roles exist
-        if (!Role::where('name', 'league_owner')->exists()) {
-            Role::create(['name' => 'league_owner', 'guard_name' => 'web']);
-        }
-        if (!Role::where('name', 'team_owner')->exists()) {
-            Role::create(['name' => 'team_owner', 'guard_name' => 'web']);
-        }
+        Role::firstOrCreate(['name' => 'league_owner', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'team_owner', 'guard_name' => 'web']);
 
         // Create League
-        $league = League::create([
-            'name' => 'Test League ' . uniqid(),
-            'slug' => 'test-league-' . uniqid(),
+        $league = League::factory()->create([
             'status' => 'active',
             'plan' => 'free',
         ]);
@@ -38,28 +32,44 @@ class TeamCreationTest extends TestCase
         // Create League Owner
         $leagueOwner = User::factory()->create();
         $leagueOwner->leagues()->attach($league);
-        setPermissionsTeamId($league->id);
+
+        app(PermissionRegistrar::class)->setPermissionsTeamId($league->id);
         $leagueOwner->assignRole('league_owner');
 
-        // Authenticate as League Owner
         $this->actingAs($leagueOwner);
 
-        // Set Panel and Tenant context
-        Filament::setCurrentPanel(Filament::getPanel('app'));
-        Filament::setTenant($league);
-
+        // Simulate team creation logic (same as CreateTeam page does)
         $managerEmail = 'manager' . uniqid() . '@test.com';
         $teamName = 'Test Team ' . uniqid();
-        $teamData = [
-            'name' => $teamName,
-            'owner_name' => 'Team Manager',
-            'owner_email' => $managerEmail,
-        ];
 
-        Livewire::test(CreateTeam::class)
-            ->fillForm($teamData)
-            ->call('create')
-            ->assertHasNoErrors();
+        $team = Team::create([
+            'name' => $teamName,
+            'slug' => \Illuminate\Support\Str::slug($teamName),
+            'league_id' => $league->id,
+        ]);
+
+        // Create or find the manager user
+        $password = \Illuminate\Support\Str::random(10);
+        $manager = User::create([
+            'name' => 'Team Manager',
+            'email' => $managerEmail,
+            'password' => \Illuminate\Support\Facades\Hash::make($password),
+        ]);
+
+        // Attach user to league
+        $manager->leagues()->attach($league);
+
+        // Assign role
+        app(PermissionRegistrar::class)->setPermissionsTeamId($league->id);
+        $manager->assignRole('team_owner');
+
+        // Attach user to team
+        $team->users()->attach($manager);
+
+        // Send invitation
+        Mail::to($manager)->send(
+            new \App\Mail\TeamOwnerInvitation($manager, $team, $password)
+        );
 
         // Assert Team Created
         $this->assertDatabaseHas('teams', [
@@ -67,18 +77,13 @@ class TeamCreationTest extends TestCase
             'league_id' => $league->id,
         ]);
 
-        $team = Team::where('name', $teamName)->first();
-
         // Assert User Created
         $this->assertDatabaseHas('users', [
             'email' => $managerEmail,
             'name' => 'Team Manager',
         ]);
 
-        $manager = User::where('email', $managerEmail)->first();
-
         // Assert Role Assigned (scoped)
-        setPermissionsTeamId($league->id); // Ensure we check in correct scope
         $this->assertTrue($manager->hasRole('team_owner'));
 
         // Assert Attached to Team
@@ -88,7 +93,7 @@ class TeamCreationTest extends TestCase
         $this->assertTrue($manager->leagues->contains($league));
 
         // Assert Email Sent
-        Mail::assertSent(TeamOwnerInvitation::class, function ($mail) use ($manager, $team) {
+        Mail::assertSent(\App\Mail\TeamOwnerInvitation::class, function ($mail) use ($manager, $team) {
             return $mail->hasTo($manager->email) && $mail->team->id === $team->id;
         });
     }

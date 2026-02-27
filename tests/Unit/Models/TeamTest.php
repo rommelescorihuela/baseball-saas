@@ -19,6 +19,16 @@ describe('Team Model', function () {
             ->and($team->exists())->toBeTrue();
     });
 
+    test('uses slug for routing', function () {
+        $team = new Team;
+        expect($team->getRouteKeyName())->toBe('slug');
+    });
+
+    test('can exist without a league (academy-centric)', function () {
+        $team = Team::factory()->create(['league_id' => null]);
+        expect($team->league_id)->toBeNull();
+    });
+
     test('has correct fillable attributes', function () {
         $team = new Team;
 

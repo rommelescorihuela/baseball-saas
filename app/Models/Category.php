@@ -17,6 +17,6 @@ class Category extends Model
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class , 'category_team');
+        return $this->belongsToMany(Team::class, 'category_team')->withPivot('status');
     }
 }

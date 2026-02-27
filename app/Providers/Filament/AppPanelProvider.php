@@ -60,6 +60,7 @@ class AppPanelProvider extends PanelProvider
             ->tenant(League::class, slugAttribute: 'slug')
             ->tenantMiddleware([
                 \App\Http\Middleware\CheckSubscriptionLimits::class,
+                \App\Http\Middleware\CheckSubscriptionActive::class,
             ])
             ->tenantMenu(true)
             ->renderHook(

@@ -10,8 +10,10 @@ class PlayerController extends Controller
 {
     public function show(Player $player)
     {
-        $player->load(['team', 'stats.game.homeTeam', 'stats.game.visitorTeam']);
+        $player->load(['team', 'currentStats', 'stats.game.homeTeam', 'stats.game.visitorTeam']);
 
-        return view('public.player.show', compact('player'));
+        $seoTitle = 'Analíticas: ' . $player->name . ' ' . $player->last_name;
+        $seoDescription = 'Perfil oficial, stats y métricas de ' . $player->name . ' del equipo ' . ($player->team ? $player->team->name : 'Agente Libre');
+        return view('public.player.show', compact('player', 'seoTitle', 'seoDescription'));
     }
 }

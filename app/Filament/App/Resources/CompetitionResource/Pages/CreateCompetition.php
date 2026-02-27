@@ -10,6 +10,20 @@ class CreateCompetition extends CreateRecord
 {
     protected static string $resource = CompetitionResource::class;
 
+    protected function beforeCreate(): void
+    {
+        $tenant = \Filament\Facades\Filament::getTenant();
+        if ($tenant && !$tenant->canCreateCompetition()) {
+            \Filament\Notifications\Notification::make()
+                ->title('Límite de competencias alcanzado')
+                ->body('Su plan actual no permite crear más competencias.')
+                ->danger()
+                ->send();
+
+            $this->halt();
+        }
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $tenant = \Filament\Facades\Filament::getTenant();

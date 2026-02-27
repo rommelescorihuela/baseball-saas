@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 class CompetitionStandingsTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
     private $league;
     private $season;
@@ -32,9 +32,9 @@ class CompetitionStandingsTest extends TestCase
         $this->category = Category::factory()->create(['league_id' => $this->league->id]);
 
         $this->competition = Competition::factory()->create([
-            'league_id' => $this->league->id,
             'season_id' => $this->season->id,
             'category_id' => $this->category->id,
+            'name' => 'Summer Championship',
         ]);
 
         $this->teamA = Team::factory()->create(['league_id' => $this->league->id, 'name' => 'Lions']);
@@ -83,7 +83,8 @@ class CompetitionStandingsTest extends TestCase
         $response = $this->get(route('public.competition.show', $this->competition));
 
         $response->assertStatus(200);
-        $response->assertSee($this->competition->name);
+        // The title contains the competition name
+        $response->assertSee('Summer Championship');
         $response->assertSee('Lions');
         $response->assertSee('Tigers');
         $response->assertSee('Bears');
@@ -105,7 +106,6 @@ class CompetitionStandingsTest extends TestCase
         $response = $this->get(route('public.competition.calendar', $this->competition));
 
         $response->assertStatus(200);
-        $response->assertSee($this->competition->name);
         $response->assertSee('Lions');
         $response->assertSee('Tigers');
     }

@@ -22,6 +22,14 @@ class AppServiceProvider extends ServiceProvider
     {
         View::addNamespace('layouts', resource_path('views/components/layouts'));
 
+        // Configurar Rate Limiting para APIs y Bruteforce Mitigation
+        \Illuminate\Support\Facades\RateLimiter::for('api', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        \Illuminate\Support\Facades\RateLimiter::for('global', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(100)->by($request->ip());
+        });
 
         // Observers para cálculo automático de estadísticas
         \App\Models\GameEvent::observe(\App\Observers\GameEventObserver::class);

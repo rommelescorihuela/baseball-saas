@@ -282,7 +282,7 @@ describe('SeasonStatsAggregator', function () {
             'team_id' => $team->id,
             'player_id' => $player->id,
             'ip' => 6,
-            'er' => 2,
+            'p_er' => 2,
             'p_h' => 5,
             'p_bb' => 2,
             'p_so' => 7,
@@ -299,7 +299,7 @@ describe('SeasonStatsAggregator', function () {
             ->first();
 
         expect($seasonStat->ip)->toBe('6.0')
-            ->and($seasonStat->er)->toBe(2)
+            ->and($seasonStat->p_er)->toBe(2)
             ->and($seasonStat->p_h)->toBe(5)
             ->and($seasonStat->p_bb)->toBe(2)
             ->and($seasonStat->p_so)->toBe(7)

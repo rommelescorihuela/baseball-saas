@@ -7,13 +7,12 @@ use App\Models\Game;
 use Filament\Resources\Pages\Page;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Form;
-use Filament\Forms;
-use Filament\Notifications\Notification;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 
 class ManualBoxScore extends Page implements HasForms
 {
@@ -23,7 +22,7 @@ class ManualBoxScore extends Page implements HasForms
 
     protected string $view = 'filament.app.resources.game-resource.pages.manual-box-score';
 
-    public Game $record;
+    public $record = null;
 
     public ?array $data = [];
 
@@ -38,24 +37,24 @@ class ManualBoxScore extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
-                Forms\Components\Section::make('Carga de Totales Finales')
+                Section::make('Carga de Totales Finales')
                     ->description('Use esta opción si no pudo anotar el juego en vivo. Esto actualizará los resultados y los standings.')
                     ->schema([
-                        Forms\Components\Grid::make(3)
+                        Grid::make(3)
                             ->schema([
-                                Forms\Components\TextInput::make('home_score')
+                                TextInput::make('home_score')
                                     ->label("Carreras {$this->record->homeTeam->name}")
                                     ->numeric()
                                     ->required(),
-                                Forms\Components\TextInput::make('visitor_score')
+                                TextInput::make('visitor_score')
                                     ->label("Carreras {$this->record->visitorTeam->name}")
                                     ->numeric()
                                     ->required(),
-                                Forms\Components\Select::make('status')
+                                Select::make('status')
                                     ->options([
                                         'finished' => 'Finalizado',
                                         'suspended' => 'Suspendido',
@@ -64,7 +63,7 @@ class ManualBoxScore extends Page implements HasForms
                             ]),
                     ]),
 
-                Forms\Components\Section::make('Nota Estadística')
+                Section::make('Nota Estadística')
                     ->description('Al guardar, el sistema marcará el juego como finalizado. Para registrar estadísticas individuales de jugadores en diferido, use la pestaña de "Estadísticas de Jugadores" en el modo edición.')
                     ->schema([
                         // In a more complex version, we could put a Repeater here for players
