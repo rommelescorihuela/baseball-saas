@@ -27,9 +27,9 @@ class AcademyPanelProvider extends PanelProvider
             ->id('academy')
             ->path('academy')
             ->colors([
-                'primary' => '#00E5FF',
-                'danger' => '#FF6E40',
-                'gray' => '#1A237E',
+                'primary' => '#FF6E40',
+                'danger' => '#FF1744',
+                'gray' => '#0a0c1f',
             ])
             ->font('Outfit')
             ->login(\App\Filament\Pages\Auth\Login::class)

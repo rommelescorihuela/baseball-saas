@@ -28,9 +28,9 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->colors([
-                'primary' => '#00E5FF',
-                'danger' => '#FF6E40',
-                'gray' => '#1A237E',
+                'primary' => '#FF6E40',
+                'danger' => '#FF1744',
+                'gray' => '#0a0c1f',
             ])
             ->font('Outfit')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
