@@ -35,6 +35,11 @@ return [
         ],
     ],
 
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+        'enabled' => env('STATS_OCR_ENABLED', false),
+    ],
+
 
 
 ];

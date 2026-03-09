@@ -18,6 +18,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\App\Actions\OcrStatsUploadAction;
 
 class PlayerGameStatsRelationManager extends RelationManager
 {
@@ -126,6 +127,7 @@ class PlayerGameStatsRelationManager extends RelationManager
             ])
             ->headerActions([
                 CreateAction::make(),
+                OcrStatsUploadAction::make(),
             ])
             ->actions([
                 EditAction::make(),
