@@ -1,0 +1,105 @@
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\EnrollmentFlowTest::an_academy_owner_can_request_enrollment_in_a_category(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\EnrollmentFlowTest::a_league_admin_can_approve_an_enrollment_request(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\EnrollmentFlowTest::an_approved_academy_can_manage_roster_for_a_competition(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\FunctionalAcademyTest::academy_owners_can_see_available_categories(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\FunctionalAcademyTest::academy_owner_can_register_for_category(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\FunctionalAcademyTest::academy_owner_can_manage_competition_roster(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\IntegrityFunctionalTest::deleting_a_player_cleans_up_stats_and_roster(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\IntegrityFunctionalTest::deleting_a_team_cleans_up_registrations_and_roster(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\LeagueAdminFunctionalTest::league_admin_can_list_their_categories(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\LeagueAdminFunctionalTest::league_admin_can_create_a_season(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\LeagueAdminFunctionalTest::league_admin_can_create_a_competition(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\PerformanceTest::team_profile_page_loads_under_200ms(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ScorerFunctionalTest::scorer_can_update_game_score_manually(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ScorerFunctionalTest::scorer_can_add_player_stats_to_a_game(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::a_team_owner_cannot_access_another_teams_players(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::enrollment_requests_are_unique_per_team_category(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::public_team_profile_returns_404_for_invalid_slug(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::a_league_admin_can_only_approve_teams_for_their_own_league_categories(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::a_league_cannot_approve_more_teams_than_its_plan_allows(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SubscriptionFunctionalTest::free_plan_league_cannot_exceed_category_limit(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SubscriptionFunctionalTest::free_plan_league_cannot_exceed_competition_limit(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SuperAdminFunctionalTest::super_admin_can_list_all_leagues(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SuperAdminFunctionalTest::super_admin_can_create_a_new_league(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SuperAdminFunctionalTest::super_admin_can_edit_league_plan(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+  ............................................................................
+  ......................................................⨯.....................
+  ............................................................................
+  .................................................⨯⨯"Team Profile Load Time: 3.8349628448486ms" // tests/Feature/PerformanceTest.php:34
+.........................
+  .......
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Models\PlayerTest > `Player Model` → can exist without…   
+  Failed asserting that 338 is null.
+
+  at tests/Unit/Models/PlayerTest.php:50
+     46▕     });
+     47▕ 
+     48▕     test('can exist without a league (academy-centric)', function () {
+     49▕         $player = Player::factory()->create(['league_id' => null]);
+  ➜  50▕         expect($player->league_id)->toBeNull();
+     51▕     });
+     52▕ 
+     53▕     test('belongs to a team', function () {
+     54▕         $player = Player::factory()->create();
+
+  1   tests/Unit/Models/PlayerTest.php:50
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\MonetizationTest > free plan limits team creation      
+  Expected response status code [302] but received 403.
+Failed asserting that 403 is identical to 302.
+
+  at tests/Feature/MonetizationTest.php:41
+     37▕     expect($league->canCreateTeam())->toBeFalse();
+     38▕ 
+     39▕     // Attempt to access create page should be intercepted by middleware
+     40▕     $this->get("/app/{$league->slug}/teams/create")
+  ➜  41▕         ->assertStatus(302);
+     42▕ });
+     43▕ 
+     44▕ test('pro plan allows more teams', function () {
+     45▕     $league = League::factory()->create([
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\MonetizationTest > pro plan allows more teams          
+  Expected response status code [302] but received 403.
+Failed asserting that 403 is identical to 302.
+
+  at tests/Feature/MonetizationTest.php:76
+     72▕ 
+     73▕     expect($league->canCreateTeam())->toBeFalse();
+     74▕ 
+     75▕     $this->get("/app/{$league->slug}/teams/create")
+  ➜  76▕         ->assertStatus(302);
+     77▕ });
+
+
+  Tests:    3 failed, 308 passed (683 assertions)
+  Duration: 71.89s
+

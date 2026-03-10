@@ -18,7 +18,8 @@ class CheckSubscriptionLimits
         /** @var \App\Models\League $league */
         $league = \Filament\Facades\Filament::getTenant();
 
-        if (!$league) {
+        $user = auth()->user();
+        if (!$league || ($user && $user->hasRole('super_admin'))) {
             return $next($request);
         }
 

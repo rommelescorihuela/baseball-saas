@@ -12,9 +12,11 @@ return new class extends Migration {
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('league_id')->constrained()->cascadeOnDelete()->index('idx_teams_league');
+            $table->foreignId('league_id')->nullable()->constrained()->cascadeOnDelete()->index('idx_teams_league');
             $table->string('name');
+            $table->string('slug')->unique()->nullable();
             $table->string('logo')->nullable();
+            $table->string('city')->nullable();
             $table->timestamps();
         });
     }

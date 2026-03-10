@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
+            $table->string('status')->default('pending'); // pending, approved, rejected
             $table->timestamps();
 
             $table->unique(['category_id', 'team_id']);

@@ -53,6 +53,11 @@ class Player extends Model
         return $this->hasMany(PlayerSeasonStat::class);
     }
 
+    public function gameStats()
+    {
+        return $this->hasMany(PlayerGameStat::class);
+    }
+
     // Helper to get latest stats (or current season if we had context)
     public function currentStats()
     {

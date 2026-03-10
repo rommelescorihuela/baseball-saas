@@ -6,7 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\ToggleButtons;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Carbon\Carbon;
 
 class SubscriptionForm

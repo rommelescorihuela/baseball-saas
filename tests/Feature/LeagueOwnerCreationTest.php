@@ -17,6 +17,12 @@ class LeagueOwnerCreationTest extends TestCase
     // use RefreshDatabase; // Use with caution on existing DB. Maybe DatabaseTruncation if available or manual cleanup.
     // Given the environment, I'll rely on manual cleanup or specific distinct data.
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
+    }
+
     public function test_league_creation_creates_owner_and_sends_email()
     {
         Mail::fake();

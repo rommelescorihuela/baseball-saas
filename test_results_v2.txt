@@ -1,0 +1,342 @@
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\EnrollmentFlowTest::an_academy_owner_can_request_enrollment_in_a_category(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\EnrollmentFlowTest::a_league_admin_can_approve_an_enrollment_request(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\EnrollmentFlowTest::an_approved_academy_can_manage_roster_for_a_competition(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\FunctionalAcademyTest::academy_owners_can_see_available_categories(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\FunctionalAcademyTest::academy_owner_can_register_for_category(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\FunctionalAcademyTest::academy_owner_can_manage_competition_roster(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\IntegrityFunctionalTest::deleting_a_player_cleans_up_stats_and_roster(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\IntegrityFunctionalTest::deleting_a_team_cleans_up_registrations_and_roster(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\LeagueAdminFunctionalTest::league_admin_can_list_their_categories(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\LeagueAdminFunctionalTest::league_admin_can_create_a_season(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\LeagueAdminFunctionalTest::league_admin_can_create_a_competition(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\PerformanceTest::team_profile_page_loads_under_200ms(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ScorerFunctionalTest::scorer_can_update_game_score_manually(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\ScorerFunctionalTest::scorer_can_add_player_stats_to_a_game(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::a_team_owner_cannot_access_another_teams_players(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::enrollment_requests_are_unique_per_team_category(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::public_team_profile_returns_404_for_invalid_slug(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::a_league_admin_can_only_approve_teams_for_their_own_league_categories(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SecurityAndEdgeCasesTest::a_league_cannot_approve_more_teams_than_its_plan_allows(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SubscriptionFunctionalTest::free_plan_league_cannot_exceed_category_limit(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SubscriptionFunctionalTest::free_plan_league_cannot_exceed_competition_limit(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SuperAdminFunctionalTest::super_admin_can_list_all_leagues(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SuperAdminFunctionalTest::super_admin_can_create_a_new_league(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+   WARN  Metadata found in doc-comment for method Tests\Feature\SuperAdminFunctionalTest::super_admin_can_edit_league_plan(). Metadata in doc-comments is deprecated and will no longer be supported in PHPUnit 12. Update your test code to use attributes instead.
+
+  ............................................................................
+  ......................................................⨯.....................
+  ............................................................................
+  ..............................................⨯⨯⨯.."Team Profile Load Time: 3.9360523223877ms" // tests/Feature/PerformanceTest.php:34
+..⨯⨯.....⨯..⨯⨯...⨯⨯...⨯..
+  ....⨯⨯.
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Unit\Models\PlayerTest > `Player Model` → can exist without…   
+  Failed asserting that 338 is null.
+
+  at tests/Unit/Models/PlayerTest.php:50
+     46▕     });
+     47▕ 
+     48▕     test('can exist without a league (academy-centric)', function () {
+     49▕         $player = Player::factory()->create(['league_id' => null]);
+  ➜  50▕         expect($player->league_id)->toBeNull();
+     51▕     });
+     52▕ 
+     53▕     test('belongs to a team', function () {
+     54▕         $player = Player::factory()->create();
+
+  1   tests/Unit/Models/PlayerTest.php:50
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\LeagueAdminFunctionalTest > league admin can create…   
+  Component has errors: "data.name" => ["The name field is required."], "data.start_date" => ["The start date field is required."], "data.end_date" => ["The end date field is required."]
+Failed asserting that false is true.
+
+  at vendor/livewire/livewire/src/Features/SupportValidation/TestsValidation.php:114
+    110▕             $message .= collect($errors->toArray())->map(function ($messages, $key) {
+    111▕                 return '"'.$key.'" => ["'.implode('", "', $messages).'"]';
+    112▕             })->implode(', ');
+    113▕ 
+  ➜ 114▕             PHPUnit::assertTrue($errors->isEmpty(), $message);
+    115▕ 
+    116▕             return $this;
+    117▕         }
+    118▕
+
+      [2m+4 vendor frames [22m
+  5   tests/Feature/LeagueAdminFunctionalTest.php:72
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\LeagueAdminFunctionalTest > league admin can create…   
+  Component has errors: "data.season_id" => ["The season field is required."], "data.category_id" => ["The category field is required."], "data.name" => ["The name field is required."], "data.start_date" => ["The start date field is required."], "data.end_date" => ["The end date field is required."]
+Failed asserting that false is true.
+
+  at vendor/livewire/livewire/src/Features/SupportValidation/TestsValidation.php:114
+    110▕             $message .= collect($errors->toArray())->map(function ($messages, $key) {
+    111▕                 return '"'.$key.'" => ["'.implode('", "', $messages).'"]';
+    112▕             })->implode(', ');
+    113▕ 
+  ➜ 114▕             PHPUnit::assertTrue($errors->isEmpty(), $message);
+    115▕ 
+    116▕             return $this;
+    117▕         }
+    118▕
+
+      [2m+4 vendor frames [22m
+  5   tests/Feature/LeagueAdminFunctionalTest.php:104
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\LeagueOwnerCreationTest > league creation creates o…   
+  Component has errors: "data.name" => ["The nombre de la Liga field is required."], "data.slug" => ["The slug field is required."], "data.owner_name" => ["The nombre del Admin field is required."], "data.owner_email" => ["The correo Electrónico field is required."], "data.owner_password" => ["The contraseña Inicial field is required."]
+Failed asserting that false is true.
+
+  at vendor/livewire/livewire/src/Features/SupportValidation/TestsValidation.php:114
+    110▕             $message .= collect($errors->toArray())->map(function ($messages, $key) {
+    111▕                 return '"'.$key.'" => ["'.implode('", "', $messages).'"]';
+    112▕             })->implode(', ');
+    113▕ 
+  ➜ 114▕             PHPUnit::assertTrue($errors->isEmpty(), $message);
+    115▕ 
+    116▕             return $this;
+    117▕         }
+    118▕
+
+      [2m+1 vendor frames [22m
+  2   tests/Feature/LeagueOwnerCreationTest.php:49
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\ScorerFunctionalTest > scorer can update game score…   
+  Failed asserting that a row in the table [games] matches the attributes {
+    "id": 106,
+    "home_score": 5,
+    "visitor_score": 3,
+    "status": "finished"
+}.
+
+Found similar results: [
+    {
+        "id": 106,
+        "home_score": 0,
+        "visitor_score": 0,
+        "status": "finished"
+    }
+].
+
+  at tests/Feature/ScorerFunctionalTest.php:76
+     72▕             ->call('save')
+     73▕             ->assertHasNoFormErrors()
+     74▕             ->assertRedirect(GameResource::getUrl('index'));
+     75▕ 
+  ➜  76▕         $this->assertDatabaseHas('games', [
+     77▕             'id' => $game->id,
+     78▕             'home_score' => 5,
+     79▕             'visitor_score' => 3,
+     80▕             'status' => 'finished'
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\ScorerFunctionalTest > scorer can add player stats…    
+  Component has errors: "mountedActions.0.data.player_id" => ["The player field is required."], "mountedActions.0.data.team_id" => ["The team id field is required."]
+Failed asserting that false is true.
+
+  at vendor/livewire/livewire/src/Features/SupportValidation/TestsValidation.php:114
+    110▕             $message .= collect($errors->toArray())->map(function ($messages, $key) {
+    111▕                 return '"'.$key.'" => ["'.implode('", "', $messages).'"]';
+    112▕             })->implode(', ');
+    113▕ 
+  ➜ 114▕             PHPUnit::assertTrue($errors->isEmpty(), $message);
+    115▕ 
+    116▕             return $this;
+    117▕         }
+    118▕
+
+      [2m+7 vendor frames [22m
+  8   tests/Feature/ScorerFunctionalTest.php:125
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\StaffManagementTest > team owner can manage staff      
+  Component has errors: "mountedActions.0.data.name" => ["The nombre field is required."], "mountedActions.0.data.email" => ["The correo Electrónico field is required."]
+Failed asserting that false is true.
+
+  at vendor/livewire/livewire/src/Features/SupportValidation/TestsValidation.php:114
+    110▕             $message .= collect($errors->toArray())->map(function ($messages, $key) {
+    111▕                 return '"'.$key.'" => ["'.implode('", "', $messages).'"]';
+    112▕             })->implode(', ');
+    113▕ 
+  ➜ 114▕             PHPUnit::assertTrue($errors->isEmpty(), $message);
+    115▕ 
+    116▕             return $this;
+    117▕         }
+    118▕
+
+      [2m+1 vendor frames [22m
+  2   tests/Feature/StaffManagementTest.php:72
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\SubscriptionFunctionalTest > free plan league canno…   
+  A notification was not sent
+Failed asserting that null is not null.
+
+  at vendor/filament/notifications/src/Notification.php:268
+    264▕         if (blank($notification)) {
+    265▕             return;
+    266▕         }
+    267▕ 
+  ➜ 268▕         Assert::assertNotNull($expectedNotification, 'A notification was not sent');
+    269▕ 
+    270▕         if ($notification instanceof Notification) {
+    271▕             Assert::assertSame(
+    272▕                 collect($expectedNotification)->except(['id'])->toArray(),
+
+      [2m+4 vendor frames [22m
+  5   tests/Feature/SubscriptionFunctionalTest.php:49
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\SubscriptionFunctionalTest > free plan league canno…   
+  A notification was not sent
+Failed asserting that null is not null.
+
+  at vendor/filament/notifications/src/Notification.php:268
+    264▕         if (blank($notification)) {
+    265▕             return;
+    266▕         }
+    267▕ 
+  ➜ 268▕         Assert::assertNotNull($expectedNotification, 'A notification was not sent');
+    269▕ 
+    270▕         if ($notification instanceof Notification) {
+    271▕             Assert::assertSame(
+    272▕                 collect($expectedNotification)->except(['id'])->toArray(),
+
+      [2m+4 vendor frames [22m
+  5   tests/Feature/SubscriptionFunctionalTest.php:85
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\SuperAdminFunctionalTest > super admin can create a…   
+  Component has errors: "data.name" => ["The nombre de la Liga field is required."], "data.slug" => ["The slug field is required."], "data.owner_name" => ["The nombre del Admin field is required."], "data.owner_email" => ["The correo Electrónico field is required."], "data.owner_password" => ["The contraseña Inicial field is required."]
+Failed asserting that false is true.
+
+  at vendor/livewire/livewire/src/Features/SupportValidation/TestsValidation.php:114
+    110▕             $message .= collect($errors->toArray())->map(function ($messages, $key) {
+    111▕                 return '"'.$key.'" => ["'.implode('", "', $messages).'"]';
+    112▕             })->implode(', ');
+    113▕ 
+  ➜ 114▕             PHPUnit::assertTrue($errors->isEmpty(), $message);
+    115▕ 
+    116▕             return $this;
+    117▕         }
+    118▕
+
+      [2m+4 vendor frames [22m
+  5   tests/Feature/SuperAdminFunctionalTest.php:63
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\SuperAdminFunctionalTest > super admin can edit lea…   
+  Failed asserting that two strings are equal.
+  -'unlimited'
+  +'free'
+  
+
+  at tests/Feature/SuperAdminFunctionalTest.php:89
+     85▕             ])
+     86▕             ->call('save')
+     87▕             ->assertHasNoFormErrors();
+     88▕ 
+  ➜  89▕         $this->assertEquals('unlimited', $league->refresh()->plan->value);
+     90▕     }
+     91▕ }
+     92▕
+
+  1   tests/Feature/SuperAdminFunctionalTest.php:89
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\TenancyTest > a user can only access leagues they b…   
+  Expected response status code [200] but received 402.
+Failed asserting that 402 is identical to 200.
+
+  at tests/Feature/TenancyTest.php:30
+     26▕ 
+     27▕     $this->actingAs($user);
+     28▕ 
+     29▕     // Can access league 1
+  ➜  30▕     $this->get("/app/{$league1->slug}")->assertStatus(200);
+     31▕ 
+     32▕     // Cannot access league 2 - Filament often returns 404 for tenants the user doesn't belong to
+     33▕     $this->get("/app/{$league2->slug}")->assertStatus(404);
+     34▕ });
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Workflows\PlayerRosterTest > can attach player to t…   
+  Component has errors: "mountedActions.0.data.recordId" => ["The jugador field is required."]
+Failed asserting that false is true.
+
+  at vendor/livewire/livewire/src/Features/SupportValidation/TestsValidation.php:114
+    110▕             $message .= collect($errors->toArray())->map(function ($messages, $key) {
+    111▕                 return '"'.$key.'" => ["'.implode('", "', $messages).'"]';
+    112▕             })->implode(', ');
+    113▕ 
+  ➜ 114▕             PHPUnit::assertTrue($errors->isEmpty(), $message);
+    115▕ 
+    116▕             return $this;
+    117▕         }
+    118▕
+
+      [2m+7 vendor frames [22m
+  8   tests/Feature/Workflows/PlayerRosterTest.php:72
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Workflows\PlayerRosterTest > can edit player pivot…    
+  Failed asserting that a row in the table [team_player_season] matches the attributes {
+    "team_id": 761,
+    "player_id": 2873,
+    "season_id": 217,
+    "number": 99,
+    "position": "1B"
+}.
+
+Found similar results: [
+    {
+        "team_id": 761,
+        "player_id": 2873,
+        "season_id": 217,
+        "number": 10,
+        "position": "SS"
+    }
+].
+
+  at tests/Feature/Workflows/PlayerRosterTest.php:105
+    101▕                 'position' => '1B',
+    102▕             ])
+    103▕             ->assertHasNoTableActionErrors();
+    104▕ 
+  ➜ 105▕         $this->assertDatabaseHas('team_player_season', [
+    106▕             'team_id' => $this->team->id,
+    107▕             'player_id' => $player->id,
+    108▕             'season_id' => $this->season->id,
+    109▕             'number' => 99,
+
+
+  Tests:    14 failed, 297 passed (666 assertions)
+  Duration: 63.77s
+

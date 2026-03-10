@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
         // Observers para cálculo automático de estadísticas
         \App\Models\GameEvent::observe(\App\Observers\GameEventObserver::class);
         \App\Models\Game::observe(\App\Observers\GameObserver::class);
+        \App\Models\Player::observe(\App\Observers\PlayerObserver::class);
     }
 }

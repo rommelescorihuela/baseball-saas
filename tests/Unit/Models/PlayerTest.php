@@ -46,7 +46,11 @@ describe('Player Model', function () {
     });
 
     test('can exist without a league (academy-centric)', function () {
-        $player = Player::factory()->create(['league_id' => null]);
+        $team = Team::factory()->create(['league_id' => null]);
+        $player = Player::factory()->create([
+            'team_id' => $team->id,
+            'league_id' => null
+        ]);
         expect($player->league_id)->toBeNull();
     });
 
